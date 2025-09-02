@@ -13,4 +13,10 @@ abstract class AirVehicle extends Vehicle {
 
         return baseTime * 0.95;
     }
+
+    protected double getMaxAltitude(){
+        return maxAltitude;
+    } //to access it for Airplane Class!
+
+
 }

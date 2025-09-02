@@ -13,4 +13,8 @@ abstract class WaterVehicle extends Vehicle {
 
         return baseTime * 1.15;
     }
+
+    public boolean gethasSail(){
+        return hasSail;
+    }
 }
