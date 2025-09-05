@@ -1,4 +1,4 @@
-abstract class Vehicle {
+abstract class Vehicle implements Comparable<Vehicle> {
     String id;
     String model;
     double maxSpeed;
@@ -25,6 +25,11 @@ abstract class Vehicle {
 
     double getCurrentMileage(){
         return currentMileage;
+    }
+
+    @Override
+    public int compareTo(Vehicle other){
+        return Double.compare(this.calculateFuelEfficiency(), other.calculateFuelEfficiency());
     }
 
 }
