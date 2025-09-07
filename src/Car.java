@@ -19,16 +19,16 @@ public class Car extends LandVehicle implements FuelConsumable, PassengerCarrier
         }
         currentMileage+= distance;
         System.out.println("Driving on road...");
-    };
+    }
 
     double calculateFuelEfficiency(){
         return 15;
-    };
+    }
 
     //LandVehicle
     double estimateJourneyTime(double distance){
         return distance/maxSpeed;
-    };
+    }
 
     //FuelConsumable
 
@@ -38,11 +38,11 @@ public class Car extends LandVehicle implements FuelConsumable, PassengerCarrier
         }
 
         fuelLevel+= amount;
-    };
+    }
 
     public double getFuelLevel(){
         return fuelLevel;
-    };
+    }
 
     public double consumeFuel(double distance) throws InsufficientFuelException{
         double newFuelLevel= fuelLevel- distance*calculateFuelEfficiency();
@@ -51,7 +51,7 @@ public class Car extends LandVehicle implements FuelConsumable, PassengerCarrier
         }
         fuelLevel= newFuelLevel;
         return newFuelLevel;
-    };
+    }
 
     //PassengerCarrier
 
@@ -81,15 +81,15 @@ public class Car extends LandVehicle implements FuelConsumable, PassengerCarrier
 
     public void scheduleMaintenance(){
         maintenanceNeeded= true;
-    };
+    }
 
     public boolean needsMaintenance(){
-        return currentMileage > 10000;
-    };
+        return currentMileage > 10000 || maintenanceNeeded;
+    }
 
     public void performMaintenance(){
         maintenanceNeeded= false;
         System.out.println("Maintenance Complete for vehicle:" + id);
-    };
+    }
 }
 

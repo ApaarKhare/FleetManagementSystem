@@ -79,14 +79,70 @@ public class FleetManager {
     }
 
     List<Vehicle> searchByType(Class<?> type){
-
+        List<Vehicle> result= new ArrayList<>();
+        for(Vehicle v: fleet){
+            if (type.isInstance(v)){
+                result.add(v);
+            }
+        }
+        return result;
     }
 
     String generateReport(){
+        //total vehicles
+        int total=0;
+        // count by type
+        int carCount=0;
+        int busCount=0;
+        int truckCount=0;
+        int airplaneCount=0;
+        // average efficiency
+        double totalEfficiency=0;
+        // total mileage
+        double totalMileage=0;
+        // maintenance status
+        int needsMaintenance=0;
+
+        for (Vehicle v:fleet){
+            total+=1;
+            if (v instanceof Car) {
+                carCount++;
+            } else if (v instanceof Bus) {
+                busCount++;
+            } else if (v instanceof Truck) {
+                truckCount++;
+            } else if (v instanceof Airplane) {
+                airplaneCount++;
+            }
+
+            totalEfficiency= v.calculateFuelEfficiency();
+            totalMileage+= v.currentMileage;
+
+        }
+
+        needsMaintenance= getVehiclesNeedingMaintenance().size();
+        double averageEfficiency = totalEfficiency/total;
+
+        return "=== Fleet Report ===\n"
+                + "Total Vehicles           : " + total + "\n"
+                + "Count by Type" + "\n"
+                + "     Cars                : " + carCount + "\n"
+                + "     Buses               : " + busCount + "\n"
+                + "     Trucks              : " + truckCount + "\n"
+                + "     Airplanes           : " + airplaneCount + "\n"
+                + "Average Efficiency       : " + String.format("%.2f", averageEfficiency) + " km/l\n"
+                + "Total Mileage            : " + String.format("%.2f", totalMileage) + " km\n"
+                + "Vehicles for Maintenance : " + needsMaintenance + "\n";
 
     }
 
     List<Vehicle> getVehiclesNeedingMaintenance(){
-
+        List<Vehicle> result= new ArrayList<>();
+        for (Vehicle v: fleet){
+            if(v instanceof Maintainable m && m.needsMaintenance()){
+                result.add(v);
+            }
+        }
+        return result;
     }
 }
