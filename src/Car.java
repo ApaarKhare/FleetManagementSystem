@@ -4,7 +4,7 @@ public class Car extends LandVehicle implements FuelConsumable, PassengerCarrier
     private int currentPassengers;
     private boolean maintenanceNeeded;
 
-    Car(String id, String model, double maxSpeed, double currentMileage, int numWheels, int currentPassengers, boolean maintenanceNeeded){
+    Car(String id, String model, double maxSpeed,  int numWheels, double currentMileage, int currentPassengers, boolean maintenanceNeeded){
         super(id, model, maxSpeed, currentMileage, numWheels);
         this.currentPassengers= currentPassengers;
         this.maintenanceNeeded= maintenanceNeeded;

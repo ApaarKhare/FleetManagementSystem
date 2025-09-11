@@ -23,6 +23,14 @@ abstract class Vehicle implements Comparable<Vehicle> {
         return id;
     }
 
+    String getModel(){
+        return model;
+    }
+
+    double getMaxSpeed(){
+        return maxSpeed;
+    }
+
     double getCurrentMileage(){
         return currentMileage;
     }

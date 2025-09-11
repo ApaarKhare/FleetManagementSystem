@@ -5,7 +5,7 @@ public class Truck extends LandVehicle implements FuelConsumable, CargoCarrier, 
     private double currentCargo;
     boolean maintenanceNeeded;
 
-    Truck(String id, String model, double maxSpeed, double currentMileage, int numWheels, int currentCargo, boolean maintenanceNeeded){
+    Truck(String id, String model, double maxSpeed, int numWheels, double currentMileage, int currentCargo, boolean maintenanceNeeded){
         super(id, model, maxSpeed, currentMileage, numWheels);
         this.currentCargo= currentCargo;
         this.maintenanceNeeded= maintenanceNeeded;

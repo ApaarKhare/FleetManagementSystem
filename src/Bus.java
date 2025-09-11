@@ -7,7 +7,7 @@ public class Bus extends LandVehicle implements FuelConsumable, PassengerCarrier
     private int currentPassengers;
     boolean maintenanceNeeded;
 
-    Bus(String id, String model, double maxSpeed, double currentMileage, int numWheels, int currentPassengers,int currentCargo, boolean maintenanceNeeded ){
+    Bus(String id, String model, double maxSpeed,int numWheels, double currentMileage,  int currentPassengers,int currentCargo, boolean maintenanceNeeded ){
         super(id, model, maxSpeed, currentMileage, numWheels);
         this.currentPassengers= currentPassengers;
         this.maintenanceNeeded= maintenanceNeeded;

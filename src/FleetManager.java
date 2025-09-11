@@ -1,6 +1,5 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.io.*;
 
 public class FleetManager {
     private ArrayList<Vehicle> fleet;
@@ -145,4 +144,32 @@ public class FleetManager {
         }
         return result;
     }
+
+    //Persistence
+
+    public void saveToFile(String filename) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
+            for (Vehicle v : fleet) {
+                pw.println(VehicleFactory.toCSV(v));
+            }
+            System.out.println("Fleet saved to " + filename);
+        } catch (IOException e) {
+            System.out.println("Error saving fleet: " + e.getMessage());
+        }
+    }
+
+    public void loadFromFile(String filename) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line;
+            fleet.clear();
+            while ((line = br.readLine()) != null) {
+                Vehicle v = VehicleFactory.fromCSV(line);
+                if (v != null) fleet.add(v);
+            }
+            System.out.println("Fleet loaded from " + filename);
+        } catch (IOException e) {
+            System.out.println("Error loading fleet: " + e.getMessage());
+        }
+    }
+
 }

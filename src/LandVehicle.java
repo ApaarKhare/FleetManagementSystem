@@ -6,6 +6,10 @@ abstract class LandVehicle extends Vehicle {
         this.numWheels= numWheels;
     }
 
+    int getNumWheels(){
+        return numWheels;
+    }
+
     @Override
 
     double estimateJourneyTime(double distance) {

@@ -6,6 +6,10 @@ abstract class WaterVehicle extends Vehicle {
         this.hasSail= hasSail;
     }
 
+    boolean getSail(){
+        return hasSail;
+    }
+
     @Override
 
     double estimateJourneyTime(double distance) {
