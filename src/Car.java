@@ -17,6 +17,8 @@ public class Car extends LandVehicle implements FuelConsumable, PassengerCarrier
         if (distance<0){
             throw new InvalidOperationException("Distance is Negative!");
         }
+
+
         currentMileage+= distance;
         System.out.println("Driving on road...");
     }

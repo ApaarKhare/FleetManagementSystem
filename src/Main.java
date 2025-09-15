@@ -57,7 +57,7 @@ public class Main {
 
     private static void addVehicleMenu() throws InvalidOperationException {
         System.out.print("Enter type (Car/Truck/Bus/Airplane/CargoShip): ");
-        String type = sc.nextLine();
+        String type = sc.nextLine().trim().toLowerCase();
         System.out.print("Enter ID: ");
         String id = sc.nextLine();
         System.out.print("Enter model: ");
@@ -72,18 +72,24 @@ public class Main {
 
         Vehicle v = null;
         switch (type) {
-            case "Car" -> {
+            case "car" -> {
                 System.out.print("Enter Current Passengers: ");
                 int passengers = sc.nextInt(); sc.nextLine();
                 v = new Car(id, model, speed, 4, mileage, passengers, maintenance);
             }
-            case "Truck" -> {
+            case "truck" -> {
                 System.out.print("Enter Current Cargo: ");
                 double cargo = sc.nextDouble(); sc.nextLine();
                 v = new Truck(id, model, speed, 6, mileage, cargo, maintenance);
             }
-            case "Bus" -> v = new Bus(id, model, speed, 6, mileage, 0, 0, false);
-            case "Airplane" -> {
+            case "bus" -> {
+                System.out.print("Enter Current Passengers: ");
+                int passengers = sc.nextInt();
+                System.out.print("Enter Current Cargo: ");
+                double cargo = sc.nextDouble(); sc.nextLine();
+                v = new Bus(id, model, speed, 6, mileage, passengers, cargo, maintenance);
+            }
+            case "airplane" -> {
                 System.out.print("Enter Current Passengers: ");
                 int passengers = sc.nextInt();
                 System.out.print("Enter Current Cargo: ");
@@ -92,7 +98,7 @@ public class Main {
                 int alt = sc.nextInt(); sc.nextLine();
                 v = new Airplane(id, model, speed, mileage, alt, passengers, cargo, maintenance);
             }
-            case "CargoShip" -> {
+            case "cargoship" -> {
                 System.out.print("Enter Current Cargo: ");
                 double cargo = sc.nextDouble();
                 System.out.print("Has sail? (true/false): ");

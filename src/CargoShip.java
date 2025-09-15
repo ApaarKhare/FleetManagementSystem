@@ -12,7 +12,7 @@ public class CargoShip extends WaterVehicle implements FuelConsumable, CargoCarr
 
     //Vehicle
     void move(double distance) throws InvalidOperationException{
-        if (distance<0){
+        if (distance<0 ){
             throw new InvalidOperationException("Distance is Negative!");
         }
         currentMileage+= distance;
@@ -20,7 +20,7 @@ public class CargoShip extends WaterVehicle implements FuelConsumable, CargoCarr
     };
 
     double calculateFuelEfficiency(){
-        return gethasSail()? 0:10;
+        return gethasSail()? 0:4;
     };
 
     //WaterVehicle

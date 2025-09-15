@@ -101,6 +101,7 @@ public class FleetManager {
         int busCount=0;
         int truckCount=0;
         int airplaneCount=0;
+        int cargoShipCount=0;
         // average efficiency
         double totalEfficiency=0;
         // total mileage
@@ -119,8 +120,11 @@ public class FleetManager {
             } else if (v instanceof Airplane) {
                 airplaneCount++;
             }
+            else if (v instanceof CargoShip) {
+                cargoShipCount++;
+            }
 
-            totalEfficiency= v.calculateFuelEfficiency();
+            totalEfficiency+= v.calculateFuelEfficiency();
             totalMileage+= v.currentMileage;
 
         }
@@ -135,6 +139,7 @@ public class FleetManager {
                 + "     Buses               : " + busCount + "\n"
                 + "     Trucks              : " + truckCount + "\n"
                 + "     Airplanes           : " + airplaneCount + "\n"
+                + "     Cargo Ship          : " + airplaneCount + "\n"
                 + "Average Efficiency       : " + String.format("%.2f", averageEfficiency) + " km/l\n"
                 + "Total Mileage            : " + String.format("%.2f", totalMileage) + " km\n"
                 + "Vehicles for Maintenance : " + needsMaintenance + "\n";

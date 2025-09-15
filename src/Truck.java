@@ -15,7 +15,7 @@ public class Truck extends LandVehicle implements FuelConsumable, CargoCarrier, 
 
         //Vehicle
     void move(double distance) throws InvalidOperationException{
-        if (distance<0){
+        if (distance<0 ){
             throw new InvalidOperationException("Distance is Negative!");
         }
         currentMileage+= distance;
