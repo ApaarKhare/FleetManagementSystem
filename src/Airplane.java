@@ -7,7 +7,7 @@ public class Airplane extends AirVehicle implements FuelConsumable, PassengerCar
     private int currentPassengers;
     boolean maintenanceNeeded;
 
-    Airplane(String id, String model, double maxSpeed, double currentMileage, int maxAltitude, int currentPassengers, int currentCargo, boolean maintenanceNeeded ){
+    Airplane(String id, String model, double maxSpeed, double currentMileage, double maxAltitude, int currentPassengers, double currentCargo, boolean maintenanceNeeded ){
         super(id, model, maxSpeed, currentMileage, maxAltitude);
         this.currentPassengers= currentPassengers;
         this.maintenanceNeeded= maintenanceNeeded;

@@ -1,7 +1,7 @@
 abstract class AirVehicle extends Vehicle {
     private double maxAltitude;
 
-    AirVehicle(String id, String model, double maxSpeed, double currentMileage, int maxAltitude){
+    AirVehicle(String id, String model, double maxSpeed, double currentMileage, double maxAltitude){
         super(id, model, maxSpeed, currentMileage);
         this.maxAltitude= maxAltitude;
     }

@@ -2,7 +2,7 @@ import java.util.*;
 import java.io.*;
 
 public class FleetManager {
-    private ArrayList<Vehicle> fleet;
+    private ArrayList<Vehicle> fleet= new ArrayList<>();
     //helpers:
     private boolean vehicleExists(ArrayList<Vehicle> list, String id) {
         for (Vehicle v : list) {
@@ -203,7 +203,7 @@ public class FleetManager {
                             Integer.parseInt(data[4]),
                             Double.parseDouble(data[5]),
                             Integer.parseInt(data[6]),
-                            Integer.parseInt(data[7]),
+                            Double.parseDouble(data[7]),
                             Boolean.parseBoolean(data[8])
                     );
 
@@ -213,7 +213,7 @@ public class FleetManager {
                             Double.parseDouble(data[3]),
                             Double.parseDouble(data[4]),
                             Boolean.parseBoolean(data[5]),
-                            Integer.parseInt(data[6]),
+                            Double.parseDouble(data[6]),
                             Boolean.parseBoolean(data[7])
                     );
 
@@ -222,9 +222,9 @@ public class FleetManager {
                             data[1], data[2],
                             Double.parseDouble(data[3]),
                             Double.parseDouble(data[4]),
-                            Integer.parseInt(data[5]),
+                            Double.parseDouble(data[5]),
                             Integer.parseInt(data[6]),
-                            Integer.parseInt(data[7]),
+                            Double.parseDouble(data[7]),
                             Boolean.parseBoolean(data[8])
                     );
 
@@ -234,7 +234,7 @@ public class FleetManager {
                             Double.parseDouble(data[3]),
                             Integer.parseInt(data[4]),
                             Double.parseDouble(data[5]),
-                            Integer.parseInt(data[6]),
+                            Double.parseDouble(data[6]),
                             Boolean.parseBoolean(data[7])
                     );
 

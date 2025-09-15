@@ -64,22 +64,40 @@ public class Main {
         String model = sc.nextLine();
         System.out.print("Enter max speed: ");
         double speed = sc.nextDouble();
+        System.out.print("Enter Mileage: ");
+        double mileage = sc.nextDouble();
+        System.out.print("Maintenance Needed?: ");
+        boolean maintenance = sc.nextBoolean();
         sc.nextLine();
 
         Vehicle v = null;
         switch (type) {
-            case "Car" -> v = new Car(id, model, speed, 4, 0.0, 0, false);
-            case "Truck" -> v = new Truck(id, model, speed, 6, 0.0, 0, false);
-            case "Bus" -> v = new Bus(id, model, speed, 6, 0.0, 0, 0, false);
+            case "Car" -> {
+                System.out.print("Enter Current Passengers: ");
+                int passengers = sc.nextInt(); sc.nextLine();
+                v = new Car(id, model, speed, 4, mileage, passengers, maintenance);
+            }
+            case "Truck" -> {
+                System.out.print("Enter Current Cargo: ");
+                double cargo = sc.nextDouble(); sc.nextLine();
+                v = new Truck(id, model, speed, 6, mileage, cargo, maintenance);
+            }
+            case "Bus" -> v = new Bus(id, model, speed, 6, mileage, 0, 0, false);
             case "Airplane" -> {
+                System.out.print("Enter Current Passengers: ");
+                int passengers = sc.nextInt();
+                System.out.print("Enter Current Cargo: ");
+                double cargo = sc.nextDouble();
                 System.out.print("Enter max altitude: ");
                 int alt = sc.nextInt(); sc.nextLine();
-                v = new Airplane(id, model, speed, 0.0, alt, 0, 0, false);
+                v = new Airplane(id, model, speed, mileage, alt, passengers, cargo, maintenance);
             }
             case "CargoShip" -> {
+                System.out.print("Enter Current Cargo: ");
+                double cargo = sc.nextDouble();
                 System.out.print("Has sail? (true/false): ");
                 boolean sail = sc.nextBoolean(); sc.nextLine();
-                v = new CargoShip(id, model, speed, 0.0, sail, 0, false);
+                v = new CargoShip(id, model, speed, mileage, sail, cargo, maintenance);
             }
         }
 
