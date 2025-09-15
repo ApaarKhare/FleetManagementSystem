@@ -9,8 +9,12 @@ public class Main {
         runCLI();
     }
 
+    //CLI
+
     private static void runCLI() {
         while (true) {
+
+            //printing menu
             System.out.println("\n=== Fleet Management System ===");
             System.out.println("1. Add Vehicle");
             System.out.println("2. Remove Vehicle");
@@ -24,6 +28,8 @@ public class Main {
             System.out.println("10. List Vehicles Needing Maintenance");
             System.out.println("11. Exit");
             System.out.print("Choose option: ");
+
+            //-----
 
             int choice = sc.nextInt();
             sc.nextLine();
