@@ -119,6 +119,4 @@ public class Bus extends LandVehicle implements FuelConsumable, PassengerCarrier
         maintenanceNeeded= false;
         System.out.println("Maintenance Complete for vehicle:" + id);
     };
-
-
 }

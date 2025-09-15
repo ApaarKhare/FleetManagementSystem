@@ -92,4 +92,3 @@ public class Car extends LandVehicle implements FuelConsumable, PassengerCarrier
         System.out.println("Maintenance Complete for vehicle:" + id);
     }
 }
-
