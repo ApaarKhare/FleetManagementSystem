@@ -16,6 +16,10 @@ public class Truck extends LandVehicle implements FuelConsumable, CargoCarrier, 
         this.maintenanceNeeded= maintenanceNeeded;
     }
 
+    public double getfuelLevel(){
+        return fuelLevel;
+    }
+
     @Override
 
         //Vehicle

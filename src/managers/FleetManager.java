@@ -89,11 +89,11 @@ public class FleetManager {
         System.out.println("Fleet sorted!");
     }
 
-    public List<Vehicle> searchByType(Class<?> type){
-        List<Vehicle> result= new ArrayList<>();
+    public List<String> searchByType(Class<?> type){
+        List<String> result= new ArrayList<>();
         for(Vehicle v: fleet){
             if (type.isInstance(v)){
-                result.add(v);
+                result.add(v.getId());
             }
         }
         return result;
@@ -125,8 +125,7 @@ public class FleetManager {
                 truckCount++;
             } else if (v instanceof Airplane) {
                 airplaneCount++;
-            }
-            else if (v instanceof CargoShip) {
+            } else if (v instanceof CargoShip) {
                 cargoShipCount++;
             }
 
@@ -145,18 +144,18 @@ public class FleetManager {
                 + "     Buses               : " + busCount + "\n"
                 + "     Trucks              : " + truckCount + "\n"
                 + "     Airplanes           : " + airplaneCount + "\n"
-                + "     Cargo Ship          : " + airplaneCount + "\n"
+                + "     Cargo Ship          : " + cargoShipCount + "\n"
                 + "Average Efficiency       : " + String.format("%.2f", averageEfficiency) + " km/l\n"
                 + "Total Mileage            : " + String.format("%.2f", totalMileage) + " km\n"
                 + "Vehicles for Maintenance : " + needsMaintenance + "\n";
 
     }
 
-    public List<Vehicle> getVehiclesNeedingMaintenance(){
-        List<Vehicle> result= new ArrayList<>();
+    public List<String> getVehiclesNeedingMaintenance(){
+        List<String> result= new ArrayList<>();
         for (Vehicle v: fleet){
             if(v instanceof Maintainable m && m.needsMaintenance()){
-                result.add(v);
+                result.add(v.getId());
             }
         }
         return result;
@@ -198,7 +197,7 @@ public class FleetManager {
 
             switch (type) {
                 case "Car":
-                    return new Car(
+                    Car car= new Car(
                             data[1], data[2],
                             Double.parseDouble(data[3]),
                             Integer.parseInt(data[4]),
@@ -206,9 +205,11 @@ public class FleetManager {
                             Integer.parseInt(data[6]),
                             Boolean.parseBoolean(data[7])
                     );
+                    car.refuel(Double.parseDouble(data[8]));
+                    return car;
 
                 case "Bus":
-                    return new Bus(
+                    Bus bus= new Bus(
                             data[1], data[2],
                             Double.parseDouble(data[3]),
                             Integer.parseInt(data[4]),
@@ -217,9 +218,11 @@ public class FleetManager {
                             Double.parseDouble(data[7]),
                             Boolean.parseBoolean(data[8])
                     );
+                    bus.refuel(Double.parseDouble(data[9]));
+                    return bus;
 
                 case "CargoShip":
-                    return new CargoShip(
+                    CargoShip ship= new CargoShip(
                             data[1], data[2],
                             Double.parseDouble(data[3]),
                             Double.parseDouble(data[4]),
@@ -227,9 +230,11 @@ public class FleetManager {
                             Double.parseDouble(data[6]),
                             Boolean.parseBoolean(data[7])
                     );
+                    ship.refuel(Double.parseDouble(data[8]));
+                    return ship;
 
                 case "Airplane":
-                    return new Airplane(
+                    Airplane plane= new Airplane(
                             data[1], data[2],
                             Double.parseDouble(data[3]),
                             Double.parseDouble(data[4]),
@@ -238,9 +243,11 @@ public class FleetManager {
                             Double.parseDouble(data[7]),
                             Boolean.parseBoolean(data[8])
                     );
+                    plane.refuel(Double.parseDouble(data[9]));
+                    return plane;
 
                 case "Truck":
-                    return new Truck(
+                    Truck truck= new Truck(
                             data[1], data[2],
                             Double.parseDouble(data[3]),
                             Integer.parseInt(data[4]),
@@ -248,6 +255,8 @@ public class FleetManager {
                             Double.parseDouble(data[6]),
                             Boolean.parseBoolean(data[7])
                     );
+                    truck.refuel(Double.parseDouble(data[8]));
+                    return truck;
 
                 default:
                     return null;
@@ -260,32 +269,32 @@ public class FleetManager {
 
     private String toCSV(Vehicle v) {
         if (v instanceof Car c) {
-            return String.format("Car,%s,%s,%.2f,%d,%.2f,%d,%b",
+            return String.format("Car,%s,%s,%.2f,%d,%.2f,%d,%b, %.2f",
                     c.getId(), c.getModel(), c.getMaxSpeed(),
                     c.getNumWheels(), c.getCurrentMileage(),
-                    c.getCurrentPassengers(), c.needsMaintenance());
+                    c.getCurrentPassengers(), c.needsMaintenance(), c.getfuelLevel());
         } else if (v instanceof Bus b) {
-            return String.format("Bus,%s,%s,%.2f,%d,%.2f,%d,%.2f,%b",
+            return String.format("Bus,%s,%s,%.2f,%d,%.2f,%d,%.2f,%b, %.2f",
                     b.getId(), b.getModel(), b.getMaxSpeed(),
                     b.getNumWheels(), b.getCurrentMileage(),
                     b.getCurrentPassengers(), b.getCurrentCargo(),
-                    b.needsMaintenance());
+                    b.needsMaintenance(), b.getfuelLevel());
         } else if (v instanceof CargoShip s) {
-            return String.format("CargoShip,%s,%s,%.2f,%.2f,%b,%.2f,%b",
+            return String.format("CargoShip,%s,%s,%.2f,%.2f,%b,%.2f,%b, %.2f",
                     s.getId(), s.getModel(), s.getMaxSpeed(),
                     s.getCurrentMileage(), s.getSail(),
-                    s.getCurrentCargo(), s.needsMaintenance());
+                    s.getCurrentCargo(), s.needsMaintenance(), s.getfuelLevel());
         } else if (v instanceof Airplane a) {
-            return String.format("Airplane,%s,%s,%.2f,%.2f,%.2f,%d,%.2f,%b",
+            return String.format("Airplane,%s,%s,%.2f,%.2f,%.2f,%d,%.2f,%b, %.2f",
                     a.getId(), a.getModel(), a.getMaxSpeed(),
                     a.getCurrentMileage(), a.getMaxAltitude(),
                     a.getCurrentPassengers(), a.getCurrentCargo(),
-                    a.needsMaintenance());
+                    a.needsMaintenance(), a.getfuelLevel());
         } else if (v instanceof Truck t) {
-            return String.format("Truck,%s,%s,%.2f,%d,%.2f,%.2f,%b",
+            return String.format("Truck,%s,%s,%.2f,%d,%.2f,%.2f,%b, %.2f",
                     t.getId(), t.getModel(), t.getMaxSpeed(),
                     t.getNumWheels(), t.getCurrentMileage(),
-                    t.getCurrentCargo(), t.needsMaintenance());
+                    t.getCurrentCargo(), t.needsMaintenance(), t.getfuelLevel());
         }
         return "";
     }

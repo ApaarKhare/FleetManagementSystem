@@ -15,6 +15,10 @@ public class CargoShip extends WaterVehicle implements FuelConsumable, CargoCarr
         this.maintenanceNeeded= maintenanceNeeded;
     }
 
+    public double getfuelLevel(){
+        return fuelLevel;
+    }
+
     //Vehicle
     public void move(double distance) throws InvalidOperationException{
         if (distance<0 ){

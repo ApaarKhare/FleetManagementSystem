@@ -15,6 +15,10 @@ public class Car extends LandVehicle implements FuelConsumable, PassengerCarrier
         this.maintenanceNeeded= maintenanceNeeded;
     }
 
+    public double getfuelLevel(){
+        return fuelLevel;
+    }
+
     @Override
 
     //Vehicle
@@ -47,7 +51,6 @@ public class Car extends LandVehicle implements FuelConsumable, PassengerCarrier
         if (amount<0){
             throw new InvalidOperationException("Negative Fuel Value");
         }
-
         fuelLevel+= amount;
     }
 

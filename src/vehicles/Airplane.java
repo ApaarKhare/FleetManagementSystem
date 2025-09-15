@@ -20,6 +20,10 @@ public class Airplane extends AirVehicle implements FuelConsumable, PassengerCar
         loadCargo(currentCargo);
     }
 
+    public double getfuelLevel(){
+        return fuelLevel;
+    }
+
     @Override
 
         //Vehicle

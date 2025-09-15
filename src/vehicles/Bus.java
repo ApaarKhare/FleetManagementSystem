@@ -19,6 +19,10 @@ public class Bus extends LandVehicle implements FuelConsumable, PassengerCarrier
         loadCargo(currentCargo);
     }
 
+    public double getfuelLevel(){
+        return fuelLevel;
+    }
+
     @Override
 
         //Vehicle
