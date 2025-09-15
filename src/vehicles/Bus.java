@@ -1,16 +1,20 @@
-public class Airplane extends AirVehicle implements FuelConsumable, PassengerCarrier, CargoCarrier, Maintainable{
+package vehicles;
+
+import exceptions.*;
+import interfaces.*;
+
+public class Bus extends LandVehicle implements FuelConsumable, PassengerCarrier, CargoCarrier, Maintainable {
 
     private double fuelLevel=0;
-    private double cargoCapacity= 10000;
+    private double cargoCapacity= 500;
     private double currentCargo;
-    private int passengerCapacity=200;
+    private int passengerCapacity=50;
     private int currentPassengers;
     boolean maintenanceNeeded;
 
-    Airplane(String id, String model, double maxSpeed, double currentMileage, double maxAltitude, int currentPassengers, double currentCargo, boolean maintenanceNeeded ) throws OverloadException{
-        super(id, model, maxSpeed, currentMileage, maxAltitude);
+    public Bus(String id, String model, double maxSpeed,int numWheels, double currentMileage,  int currentPassengers, double currentCargo, boolean maintenanceNeeded ) throws OverloadException{
+        super(id, model, maxSpeed, currentMileage, numWheels);
         boardPassengers(currentPassengers);
-
         this.maintenanceNeeded= maintenanceNeeded;
         loadCargo(currentCargo);
     }
@@ -18,27 +22,28 @@ public class Airplane extends AirVehicle implements FuelConsumable, PassengerCar
     @Override
 
         //Vehicle
-    void move(double distance) throws InvalidOperationException{
+    public void move(double distance) throws InvalidOperationException{
         if (distance<0){
             throw new InvalidOperationException("Distance is Negative!");
         }
+
         double movableDistance= calculateFuelEfficiency()*fuelLevel;
 
         if (distance>movableDistance) {
             throw new InvalidOperationException("Can't move on this fuel level");
         }
         currentMileage+= distance;
-        System.out.println("Flying at"+ getMaxAltitude());
-    };
+        System.out.println("Transporting Passengers and Cargo...");
+    }
 
-    double calculateFuelEfficiency(){
-        return 5;
-    };
+    public double calculateFuelEfficiency(){
+        return 10;
+    }
 
-    //AirVehicle
-    double estimateJourneyTime(double distance){
+    //LandVehicle
+    public double estimateJourneyTime(double distance){
         return distance/maxSpeed;
-    };
+    }
 
     //FuelConsumable
 
@@ -48,11 +53,11 @@ public class Airplane extends AirVehicle implements FuelConsumable, PassengerCar
         }
 
         fuelLevel+= amount;
-    };
+    }
 
     public double getFuelLevel(){
         return fuelLevel;
-    };
+    }
 
     public double consumeFuel(double distance) throws InsufficientFuelException{
         double newFuelLevel= fuelLevel- distance*calculateFuelEfficiency();
@@ -61,7 +66,7 @@ public class Airplane extends AirVehicle implements FuelConsumable, PassengerCar
         }
         fuelLevel= newFuelLevel;
         return newFuelLevel;
-    };
+    }
 
     //PassengerCarrier
 
@@ -115,15 +120,14 @@ public class Airplane extends AirVehicle implements FuelConsumable, PassengerCar
 
     public void scheduleMaintenance(){
         maintenanceNeeded= true;
-    };
+    }
 
     public boolean needsMaintenance(){
         return currentMileage > 10000;
-    };
+    }
 
     public void performMaintenance(){
         maintenanceNeeded= false;
         System.out.println("Maintenance Complete for vehicle:" + id);
-    };
-
+    }
 }

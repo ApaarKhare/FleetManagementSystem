@@ -1,3 +1,10 @@
+package main;
+
+import vehicles.*;
+import exceptions.*;
+import interfaces.*;
+import managers.*;
+
 import java.util.*;
 
 public class Main {

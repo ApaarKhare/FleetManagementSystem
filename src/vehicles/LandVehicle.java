@@ -1,4 +1,9 @@
-abstract class LandVehicle extends Vehicle {
+package vehicles;
+
+import exceptions.*;
+import interfaces.*;
+
+public abstract class LandVehicle extends Vehicle {
     private int numWheels;
 
     LandVehicle(String id, String model, double maxSpeed, double currentMileage, int numWheels){
@@ -6,7 +11,7 @@ abstract class LandVehicle extends Vehicle {
         this.numWheels= numWheels;
     }
 
-    int getNumWheels(){
+    public int getNumWheels(){
         return numWheels;
     }
 

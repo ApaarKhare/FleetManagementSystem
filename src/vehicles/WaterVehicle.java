@@ -1,18 +1,23 @@
-abstract class WaterVehicle extends Vehicle {
+package vehicles;
+
+import exceptions.*;
+import interfaces.*;
+
+public abstract class WaterVehicle extends Vehicle {
     private boolean hasSail;
 
-    WaterVehicle(String id, String model, double maxSpeed, double currentMileage, boolean hasSail){
+    public WaterVehicle(String id, String model, double maxSpeed, double currentMileage, boolean hasSail){
         super(id, model, maxSpeed, currentMileage);
         this.hasSail= hasSail;
     }
 
-    boolean getSail(){
+    public boolean getSail(){
         return hasSail;
     }
 
     @Override
 
-    double estimateJourneyTime(double distance) {
+    public double estimateJourneyTime(double distance) {
         double baseTime = distance / maxSpeed;
 
         return baseTime * 1.15;

@@ -1,44 +1,48 @@
-public class Bus extends LandVehicle implements FuelConsumable, PassengerCarrier, CargoCarrier, Maintainable {
+package vehicles;
+
+import exceptions.*;
+import interfaces.*;
+
+public class Truck extends LandVehicle implements FuelConsumable, CargoCarrier, Maintainable{
 
     private double fuelLevel=0;
-    private double cargoCapacity= 500;
+    private double cargoCapacity= 5000;
     private double currentCargo;
-    private int passengerCapacity=50;
-    private int currentPassengers;
     boolean maintenanceNeeded;
 
-    Bus(String id, String model, double maxSpeed,int numWheels, double currentMileage,  int currentPassengers, double currentCargo, boolean maintenanceNeeded ) throws OverloadException{
+    public Truck(String id, String model, double maxSpeed, int numWheels, double currentMileage, double currentCargo, boolean maintenanceNeeded) throws OverloadException{
         super(id, model, maxSpeed, currentMileage, numWheels);
-        boardPassengers(currentPassengers);
-        this.maintenanceNeeded= maintenanceNeeded;
         loadCargo(currentCargo);
+        this.maintenanceNeeded= maintenanceNeeded;
     }
 
     @Override
 
         //Vehicle
-    void move(double distance) throws InvalidOperationException{
-        if (distance<0){
+    public void move(double distance) throws InvalidOperationException{
+        if (distance<0 ){
             throw new InvalidOperationException("Distance is Negative!");
         }
-
         double movableDistance= calculateFuelEfficiency()*fuelLevel;
 
         if (distance>movableDistance) {
             throw new InvalidOperationException("Can't move on this fuel level");
         }
         currentMileage+= distance;
-        System.out.println("Transporting Passengers and Cargo...");
-    };
+        System.out.println("Hauling Cargo...");
+    }
 
-    double calculateFuelEfficiency(){
-        return 10;
-    };
+    public double calculateFuelEfficiency(){
+        if (currentCargo>0.5*cargoCapacity){
+            return 8*0.9; //if loaded > 50% capacity reduces efficiency by 10%
+        }
+        return 8;
+    }
 
     //LandVehicle
-    double estimateJourneyTime(double distance){
+    public double estimateJourneyTime(double distance){
         return distance/maxSpeed;
-    };
+    }
 
     //FuelConsumable
 
@@ -48,11 +52,11 @@ public class Bus extends LandVehicle implements FuelConsumable, PassengerCarrier
         }
 
         fuelLevel+= amount;
-    };
+    }
 
     public double getFuelLevel(){
         return fuelLevel;
-    };
+    }
 
     public double consumeFuel(double distance) throws InsufficientFuelException{
         double newFuelLevel= fuelLevel- distance*calculateFuelEfficiency();
@@ -61,30 +65,6 @@ public class Bus extends LandVehicle implements FuelConsumable, PassengerCarrier
         }
         fuelLevel= newFuelLevel;
         return newFuelLevel;
-    };
-
-    //PassengerCarrier
-
-    public void boardPassengers(int count) throws OverloadException{
-        if(currentPassengers+ count> passengerCapacity){
-            throw new OverloadException();
-        }
-
-        currentPassengers+= count;
-    }
-
-    public void disembarkPassengers(int count) throws InvalidOperationException{
-        if (count>currentPassengers){
-            throw new InvalidOperationException("Not Enough Passengers!");
-        }
-        currentPassengers-= count;
-    }
-    public int getPassengerCapacity(){
-        return passengerCapacity;
-    }
-
-    public int getCurrentPassengers(){
-        return currentPassengers;
     }
 
     //CargoCarrier
@@ -115,14 +95,15 @@ public class Bus extends LandVehicle implements FuelConsumable, PassengerCarrier
 
     public void scheduleMaintenance(){
         maintenanceNeeded= true;
-    };
+    }
 
     public boolean needsMaintenance(){
         return currentMileage > 10000;
-    };
+    }
 
     public void performMaintenance(){
         maintenanceNeeded= false;
         System.out.println("Maintenance Complete for vehicle:" + id);
-    };
+    }
+
 }

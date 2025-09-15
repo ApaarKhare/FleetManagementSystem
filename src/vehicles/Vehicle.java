@@ -1,4 +1,10 @@
-abstract class Vehicle implements Comparable<Vehicle> {
+package vehicles;
+
+import exceptions.*;
+import interfaces.*;
+
+
+public abstract class Vehicle implements Comparable<Vehicle> {
     String id;
     String model;
     double maxSpeed;
@@ -11,27 +17,27 @@ abstract class Vehicle implements Comparable<Vehicle> {
         this.currentMileage = currentMileage;
     }
 
-    abstract void move(double distance) throws InvalidOperationException;
-    abstract double calculateFuelEfficiency();
+    public abstract void move(double distance) throws InvalidOperationException;
+    public abstract double calculateFuelEfficiency();
     abstract double estimateJourneyTime(double distance);
 
-    void displayInfo(){
+    public void displayInfo(){
         System.out.println("Vehicle Id:"+ id+ "Model: "+ model+ "Maximum Speed: "+ maxSpeed+ "Mileage: "+ currentMileage);
     }
 
-    String getId(){
+    public String getId(){
         return id;
     }
 
-    String getModel(){
+    public String getModel(){
         return model;
     }
 
-    double getMaxSpeed(){
+    public double getMaxSpeed(){
         return maxSpeed;
     }
 
-    double getCurrentMileage(){
+    public double getCurrentMileage(){
         return currentMileage;
     }
 

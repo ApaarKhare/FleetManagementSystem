@@ -1,40 +1,49 @@
-public class Car extends LandVehicle implements FuelConsumable, PassengerCarrier, Maintainable{
-    private double fuelLevel=0;
-    private int passengerCapacity=5;
-    private int currentPassengers;
-    private boolean maintenanceNeeded;
+package vehicles;
 
-    Car(String id, String model, double maxSpeed,  int numWheels, double currentMileage, int currentPassengers, boolean maintenanceNeeded) throws OverloadException {
-        super(id, model, maxSpeed, currentMileage, numWheels);
+import exceptions.*;
+import interfaces.*;
+
+public class Airplane extends AirVehicle implements FuelConsumable, PassengerCarrier, CargoCarrier, Maintainable{
+
+    private double fuelLevel=0;
+    private double cargoCapacity= 10000;
+    private double currentCargo;
+    private int passengerCapacity=200;
+    private int currentPassengers;
+    boolean maintenanceNeeded;
+
+    public Airplane(String id, String model, double maxSpeed, double currentMileage, double maxAltitude, int currentPassengers, double currentCargo, boolean maintenanceNeeded ) throws OverloadException{
+        super(id, model, maxSpeed, currentMileage, maxAltitude);
         boardPassengers(currentPassengers);
+
         this.maintenanceNeeded= maintenanceNeeded;
+        loadCargo(currentCargo);
     }
 
     @Override
 
-    //Vehicle
-    void move(double distance) throws InvalidOperationException{
+        //Vehicle
+    public void move(double distance) throws InvalidOperationException{
         if (distance<0){
             throw new InvalidOperationException("Distance is Negative!");
         }
-
         double movableDistance= calculateFuelEfficiency()*fuelLevel;
 
         if (distance>movableDistance) {
             throw new InvalidOperationException("Can't move on this fuel level");
         }
         currentMileage+= distance;
-        System.out.println("Driving on road...");
-    }
+        System.out.println("Flying at"+ getMaxAltitude());
+    };
 
-    double calculateFuelEfficiency(){
-        return 15;
-    }
+    public double calculateFuelEfficiency(){
+        return 5;
+    };
 
-    //LandVehicle
-    double estimateJourneyTime(double distance){
+    //AirVehicle
+    public double estimateJourneyTime(double distance){
         return distance/maxSpeed;
-    }
+    };
 
     //FuelConsumable
 
@@ -44,11 +53,11 @@ public class Car extends LandVehicle implements FuelConsumable, PassengerCarrier
         }
 
         fuelLevel+= amount;
-    }
+    };
 
     public double getFuelLevel(){
         return fuelLevel;
-    }
+    };
 
     public double consumeFuel(double distance) throws InsufficientFuelException{
         double newFuelLevel= fuelLevel- distance*calculateFuelEfficiency();
@@ -57,7 +66,7 @@ public class Car extends LandVehicle implements FuelConsumable, PassengerCarrier
         }
         fuelLevel= newFuelLevel;
         return newFuelLevel;
-    }
+    };
 
     //PassengerCarrier
 
@@ -83,18 +92,43 @@ public class Car extends LandVehicle implements FuelConsumable, PassengerCarrier
         return currentPassengers;
     }
 
+    //CargoCarrier
+
+    public void loadCargo(double weight) throws OverloadException{
+        if(currentCargo+weight>cargoCapacity){
+            throw new OverloadException();
+        }
+        currentCargo+= weight;
+
+    }
+    public void unloadCargo(double weight) throws InvalidOperationException{
+        if (weight>currentCargo){
+            throw new InvalidOperationException("Can't Unload!");
+        }
+        currentCargo-= weight;
+    }
+
+    public double getCargoCapacity(){
+        return cargoCapacity;
+    }
+
+    public double getCurrentCargo(){
+        return currentCargo;
+    }
+
     //Maintainable
 
     public void scheduleMaintenance(){
         maintenanceNeeded= true;
-    }
+    };
 
     public boolean needsMaintenance(){
-        return currentMileage > 10000 || maintenanceNeeded;
-    }
+        return currentMileage > 10000;
+    };
 
     public void performMaintenance(){
         maintenanceNeeded= false;
         System.out.println("Maintenance Complete for vehicle:" + id);
-    }
+    };
+
 }

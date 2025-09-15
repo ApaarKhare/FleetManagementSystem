@@ -1,7 +1,12 @@
-abstract class AirVehicle extends Vehicle {
+package vehicles;
+
+import exceptions.*;
+import interfaces.*;
+
+public abstract class AirVehicle extends Vehicle {
     private double maxAltitude;
 
-    AirVehicle(String id, String model, double maxSpeed, double currentMileage, double maxAltitude){
+    public AirVehicle(String id, String model, double maxSpeed, double currentMileage, double maxAltitude){
         super(id, model, maxSpeed, currentMileage);
         this.maxAltitude= maxAltitude;
     }
@@ -14,7 +19,7 @@ abstract class AirVehicle extends Vehicle {
         return baseTime * 0.95;
     }
 
-    protected double getMaxAltitude(){
+    public double getMaxAltitude(){
         return maxAltitude;
     } //to access it for Airplane Class!
 

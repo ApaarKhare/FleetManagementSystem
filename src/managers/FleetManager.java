@@ -1,5 +1,11 @@
+package managers;
+
 import java.util.*;
 import java.io.*;
+import vehicles.*;
+import interfaces.*;
+import exceptions.*;
+
 
 public class FleetManager {
     private ArrayList<Vehicle> fleet= new ArrayList<>();
@@ -20,8 +26,8 @@ public class FleetManager {
     }
 
     //main
-    void addVehicle(Vehicle v) throws InvalidOperationException{
-        if(vehicleExists(fleet, v.id)){
+    public void addVehicle(Vehicle v) throws InvalidOperationException{
+        if(vehicleExists(fleet, v.getId())){
             throw new InvalidOperationException("Vehicle already exists");
         }
 
@@ -29,7 +35,7 @@ public class FleetManager {
         System.out.println("Vehicle added to fleet!");
     }
 
-    void removeVehicle(String id) throws InvalidOperationException{
+    public void removeVehicle(String id) throws InvalidOperationException{
         if(vehicleExists(fleet, id)){
             fleet.removeIf(v -> v.getId().equals(id));
         }
@@ -40,7 +46,7 @@ public class FleetManager {
         System.out.println("Vehicle removed from fleet!");
     }
 
-    void startAllJourneys(double distance) {
+    public void startAllJourneys(double distance) {
         for (Vehicle v : fleet) {
             try {
                 v.move(distance);
@@ -53,7 +59,7 @@ public class FleetManager {
         System.out.println("All journeys started!");
     }
 
-    double getTotalFuelConsumption(double distance){
+    public double getTotalFuelConsumption(double distance){
         double TotalFuelConsumed=0;
         for (Vehicle v: fleet){
             if(v instanceof FuelConsumable f){
@@ -68,7 +74,7 @@ public class FleetManager {
         return TotalFuelConsumed;
     }
 
-    void maintainAll(){
+    public void maintainAll(){
         for (Vehicle v: fleet){
             if(v instanceof Maintainable m && m.needsMaintenance()){
                 m.performMaintenance();
@@ -78,12 +84,12 @@ public class FleetManager {
         System.out.println("Maintenance complete!");
     }
 
-    void sortFleetByEfficiency(){
+    public void sortFleetByEfficiency(){
         Collections.sort(fleet);
         System.out.println("Fleet sorted!");
     }
 
-    List<Vehicle> searchByType(Class<?> type){
+    public List<Vehicle> searchByType(Class<?> type){
         List<Vehicle> result= new ArrayList<>();
         for(Vehicle v: fleet){
             if (type.isInstance(v)){
@@ -93,7 +99,7 @@ public class FleetManager {
         return result;
     }
 
-    String generateReport(){
+    public String generateReport(){
         //total vehicles
         int total=0;
         // count by type
@@ -125,7 +131,7 @@ public class FleetManager {
             }
 
             totalEfficiency+= v.calculateFuelEfficiency();
-            totalMileage+= v.currentMileage;
+            totalMileage+= v.getCurrentMileage();
 
         }
 
@@ -146,7 +152,7 @@ public class FleetManager {
 
     }
 
-    List<Vehicle> getVehiclesNeedingMaintenance(){
+    public List<Vehicle> getVehiclesNeedingMaintenance(){
         List<Vehicle> result= new ArrayList<>();
         for (Vehicle v: fleet){
             if(v instanceof Maintainable m && m.needsMaintenance()){
