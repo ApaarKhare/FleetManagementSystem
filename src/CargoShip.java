@@ -4,15 +4,9 @@ public class CargoShip extends WaterVehicle implements FuelConsumable, CargoCarr
     private double currentCargo;
     boolean maintenanceNeeded;
 
-    CargoShip(String id, String model, double maxSpeed, double currentMileage, boolean hasSail, double currentCargo, boolean maintenanceNeeded){
+    CargoShip(String id, String model, double maxSpeed, double currentMileage, boolean hasSail, double currentCargo, boolean maintenanceNeeded) throws OverloadException{
         super(id, model, maxSpeed, currentMileage, hasSail);
-        try {
-            loadCargo(currentCargo);
-        }
-        catch(OverloadException e){
-            System.out.println("Cargo Exceeded Capacity");
-        }
-
+        loadCargo(currentCargo);
         this.maintenanceNeeded= maintenanceNeeded;
     }
 

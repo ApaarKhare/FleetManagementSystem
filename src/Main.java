@@ -75,19 +75,37 @@ public class Main {
             case "car" -> {
                 System.out.print("Enter Current Passengers: ");
                 int passengers = sc.nextInt(); sc.nextLine();
-                v = new Car(id, model, speed, 4, mileage, passengers, maintenance);
+                try {
+                    v = new Car(id, model, speed, 4, mileage, passengers, maintenance);
+                }
+                catch(Exception e){
+                    System.out.println("Cannot add car: " + e.getMessage());
+                    return;
+                }
             }
             case "truck" -> {
                 System.out.print("Enter Current Cargo: ");
                 double cargo = sc.nextDouble(); sc.nextLine();
-                v = new Truck(id, model, speed, 6, mileage, cargo, maintenance);
+                try {
+                    v = new Truck(id, model, speed, 6, mileage, cargo, maintenance);
+                }
+                catch (Exception e){
+                    System.out.println("Cannot add truck: " + e.getMessage());
+                    return;
+                }
             }
             case "bus" -> {
                 System.out.print("Enter Current Passengers: ");
                 int passengers = sc.nextInt();
                 System.out.print("Enter Current Cargo: ");
                 double cargo = sc.nextDouble(); sc.nextLine();
-                v = new Bus(id, model, speed, 6, mileage, passengers, cargo, maintenance);
+                try {
+                    v = new Bus(id, model, speed, 6, mileage, passengers, cargo, maintenance);
+                }
+                catch (Exception e){
+                    System.out.println("Cannot add Bus: " +e.getMessage());
+                    return;
+                }
             }
             case "airplane" -> {
                 System.out.print("Enter Current Passengers: ");
@@ -96,14 +114,27 @@ public class Main {
                 double cargo = sc.nextDouble();
                 System.out.print("Enter max altitude: ");
                 int alt = sc.nextInt(); sc.nextLine();
-                v = new Airplane(id, model, speed, mileage, alt, passengers, cargo, maintenance);
+                try {
+                    v = new Airplane(id, model, speed, mileage, alt, passengers, cargo, maintenance);
+                }
+                catch (Exception e){
+                    System.out.println("Airplane cannot be added:" + e.getMessage());
+                    return;
+                }
             }
             case "cargoship" -> {
                 System.out.print("Enter Current Cargo: ");
                 double cargo = sc.nextDouble();
                 System.out.print("Has sail? (true/false): ");
                 boolean sail = sc.nextBoolean(); sc.nextLine();
-                v = new CargoShip(id, model, speed, mileage, sail, cargo, maintenance);
+                try {
+                    v = new CargoShip(id, model, speed, mileage, sail, cargo, maintenance);
+                }
+                catch (Exception e){
+                    System.out.println("Cannot add Ship: "+ e.getMessage());
+                    return;
+                }
+
             }
         }
 

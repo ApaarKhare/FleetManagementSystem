@@ -5,14 +5,9 @@ public class Truck extends LandVehicle implements FuelConsumable, CargoCarrier, 
     private double currentCargo;
     boolean maintenanceNeeded;
 
-    Truck(String id, String model, double maxSpeed, int numWheels, double currentMileage, double currentCargo, boolean maintenanceNeeded){
+    Truck(String id, String model, double maxSpeed, int numWheels, double currentMileage, double currentCargo, boolean maintenanceNeeded) throws OverloadException{
         super(id, model, maxSpeed, currentMileage, numWheels);
-        try {
-            loadCargo(currentCargo);
-        }
-        catch(OverloadException e){
-            System.out.println("Cargo Exceeded Capacity");
-        }
+        loadCargo(currentCargo);
         this.maintenanceNeeded= maintenanceNeeded;
     }
 

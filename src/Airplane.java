@@ -7,23 +7,12 @@ public class Airplane extends AirVehicle implements FuelConsumable, PassengerCar
     private int currentPassengers;
     boolean maintenanceNeeded;
 
-    Airplane(String id, String model, double maxSpeed, double currentMileage, double maxAltitude, int currentPassengers, double currentCargo, boolean maintenanceNeeded ){
+    Airplane(String id, String model, double maxSpeed, double currentMileage, double maxAltitude, int currentPassengers, double currentCargo, boolean maintenanceNeeded ) throws OverloadException{
         super(id, model, maxSpeed, currentMileage, maxAltitude);
-        try {
-            boardPassengers(currentPassengers);
-        }
-        catch(OverloadException e){
-            System.out.println("Passengers Exceeded Capacity");
-        }
+        boardPassengers(currentPassengers);
 
         this.maintenanceNeeded= maintenanceNeeded;
-
-        try {
-            loadCargo(currentCargo);
-        }
-        catch(OverloadException e){
-            System.out.println("Cargo Exceeded Capacity");
-        }
+        loadCargo(currentCargo);
     }
 
     @Override
