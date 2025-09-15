@@ -18,7 +18,7 @@ public abstract class LandVehicle extends Vehicle {
     @Override
 
     double estimateJourneyTime(double distance) {
-        double baseTime = distance / maxSpeed;
+        double baseTime = distance / getMaxSpeed();
 
         return baseTime * 1.1;
     }

@@ -5,10 +5,10 @@ import interfaces.*;
 
 
 public abstract class Vehicle implements Comparable<Vehicle> {
-    String id;
-    String model;
-    double maxSpeed;
-    double currentMileage;
+    private String id;
+    private String model;
+    private double maxSpeed;
+    private double currentMileage;
 
     Vehicle(String id, String model, double maxSpeed, double currentMileage) {
         this.id = id;
@@ -39,6 +39,10 @@ public abstract class Vehicle implements Comparable<Vehicle> {
 
     public double getCurrentMileage(){
         return currentMileage;
+    }
+
+    public void setCurrentMileage(double distance){
+        currentMileage+=distance;
     }
 
     @Override

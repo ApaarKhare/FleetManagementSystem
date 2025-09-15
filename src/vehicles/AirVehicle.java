@@ -14,7 +14,7 @@ public abstract class AirVehicle extends Vehicle {
     @Override
 
     double estimateJourneyTime(double distance) {
-        double baseTime = distance / maxSpeed;
+        double baseTime = distance / getMaxSpeed();
 
         return baseTime * 0.95;
     }

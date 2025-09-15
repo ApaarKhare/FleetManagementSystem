@@ -36,7 +36,15 @@ public class Bus extends LandVehicle implements FuelConsumable, PassengerCarrier
         if (distance>movableDistance) {
             throw new InvalidOperationException("Can't move on this fuel level");
         }
-        currentMileage+= distance;
+
+        try {
+            consumeFuel(distance);
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        setCurrentMileage(distance);
         System.out.println("Transporting Passengers and Cargo...");
     }
 
@@ -46,7 +54,7 @@ public class Bus extends LandVehicle implements FuelConsumable, PassengerCarrier
 
     //LandVehicle
     public double estimateJourneyTime(double distance){
-        return distance/maxSpeed;
+        return distance/getMaxSpeed();
     }
 
     //FuelConsumable
@@ -64,7 +72,7 @@ public class Bus extends LandVehicle implements FuelConsumable, PassengerCarrier
     }
 
     public double consumeFuel(double distance) throws InsufficientFuelException{
-        double newFuelLevel= fuelLevel- distance*calculateFuelEfficiency();
+        double newFuelLevel= fuelLevel- (distance/calculateFuelEfficiency());
         if(newFuelLevel<0){
             throw new InsufficientFuelException();
         }
@@ -127,11 +135,11 @@ public class Bus extends LandVehicle implements FuelConsumable, PassengerCarrier
     }
 
     public boolean needsMaintenance(){
-        return currentMileage > 10000;
+        return getCurrentMileage() > 10000;
     }
 
     public void performMaintenance(){
         maintenanceNeeded= false;
-        System.out.println("Maintenance Complete for vehicle:" + id);
+        System.out.println("Maintenance Complete for vehicle:" + getId());
     }
 }

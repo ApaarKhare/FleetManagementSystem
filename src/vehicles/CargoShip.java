@@ -29,7 +29,13 @@ public class CargoShip extends WaterVehicle implements FuelConsumable, CargoCarr
         if (distance>movableDistance) {
             throw new InvalidOperationException("Can't move on this fuel level");
         }
-        currentMileage+= distance;
+        try {
+            consumeFuel(distance);
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        setCurrentMileage(distance);
         System.out.println("Transporting Passengers and Cargo...");
     };
 
@@ -39,7 +45,7 @@ public class CargoShip extends WaterVehicle implements FuelConsumable, CargoCarr
 
     //WaterVehicle
     public double estimateJourneyTime(double distance){
-        return distance/maxSpeed;
+        return distance/getMaxSpeed();
     };
 
     //CargoCarrier
@@ -73,12 +79,12 @@ public class CargoShip extends WaterVehicle implements FuelConsumable, CargoCarr
     };
 
     public boolean needsMaintenance(){
-        return currentMileage > 10000;
+        return getCurrentMileage() > 10000;
     };
 
     public void performMaintenance(){
         maintenanceNeeded= false;
-        System.out.println("Maintenance Complete for vehicle:" + id);
+        System.out.println("Maintenance Complete for vehicle:" + getId());
     };
 
     //FuelConsumable
@@ -99,7 +105,7 @@ public class CargoShip extends WaterVehicle implements FuelConsumable, CargoCarr
     public double consumeFuel(double distance) throws InsufficientFuelException{
 
         if (gethasSail()) return 0;
-        double newFuelLevel= fuelLevel- distance*calculateFuelEfficiency();
+        double newFuelLevel= fuelLevel- (distance/calculateFuelEfficiency());
         if(newFuelLevel<0){
             throw new InsufficientFuelException();
         }

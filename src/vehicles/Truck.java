@@ -27,12 +27,18 @@ public class Truck extends LandVehicle implements FuelConsumable, CargoCarrier, 
         if (distance<0 ){
             throw new InvalidOperationException("Distance is Negative!");
         }
-        double movableDistance= calculateFuelEfficiency()*fuelLevel;
+        double movableDistance= (calculateFuelEfficiency()/fuelLevel);
 
         if (distance>movableDistance) {
             throw new InvalidOperationException("Can't move on this fuel level");
         }
-        currentMileage+= distance;
+        try {
+            consumeFuel(distance);
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        setCurrentMileage(distance);
         System.out.println("Hauling Cargo...");
     }
 
@@ -45,7 +51,7 @@ public class Truck extends LandVehicle implements FuelConsumable, CargoCarrier, 
 
     //LandVehicle
     public double estimateJourneyTime(double distance){
-        return distance/maxSpeed;
+        return distance/getMaxSpeed();
     }
 
     //FuelConsumable
@@ -102,12 +108,12 @@ public class Truck extends LandVehicle implements FuelConsumable, CargoCarrier, 
     }
 
     public boolean needsMaintenance(){
-        return currentMileage > 10000;
+        return getCurrentMileage() > 10000;
     }
 
     public void performMaintenance(){
         maintenanceNeeded= false;
-        System.out.println("Maintenance Complete for vehicle:" + id);
+        System.out.println("Maintenance Complete for vehicle:" + getId());
     }
 
 }

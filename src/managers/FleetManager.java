@@ -272,13 +272,13 @@ public class FleetManager {
             return String.format("Car,%s,%s,%.2f,%d,%.2f,%d,%b, %.2f",
                     c.getId(), c.getModel(), c.getMaxSpeed(),
                     c.getNumWheels(), c.getCurrentMileage(),
-                    c.getCurrentPassengers(), c.needsMaintenance(), c.getfuelLevel());
+                    c.getCurrentPassengers(), c.needsMaintenance(), c.getFuelLevel());
         } else if (v instanceof Bus b) {
             return String.format("Bus,%s,%s,%.2f,%d,%.2f,%d,%.2f,%b, %.2f",
                     b.getId(), b.getModel(), b.getMaxSpeed(),
                     b.getNumWheels(), b.getCurrentMileage(),
                     b.getCurrentPassengers(), b.getCurrentCargo(),
-                    b.needsMaintenance(), b.getfuelLevel());
+                    b.needsMaintenance(), b.getFuelLevel());
         } else if (v instanceof CargoShip s) {
             return String.format("CargoShip,%s,%s,%.2f,%.2f,%b,%.2f,%b, %.2f",
                     s.getId(), s.getModel(), s.getMaxSpeed(),
@@ -289,7 +289,7 @@ public class FleetManager {
                     a.getId(), a.getModel(), a.getMaxSpeed(),
                     a.getCurrentMileage(), a.getMaxAltitude(),
                     a.getCurrentPassengers(), a.getCurrentCargo(),
-                    a.needsMaintenance(), a.getfuelLevel());
+                    a.needsMaintenance(), a.getFuelLevel());
         } else if (v instanceof Truck t) {
             return String.format("Truck,%s,%s,%.2f,%d,%.2f,%.2f,%b, %.2f",
                     t.getId(), t.getModel(), t.getMaxSpeed(),
