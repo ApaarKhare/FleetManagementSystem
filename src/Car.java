@@ -6,7 +6,14 @@ public class Car extends LandVehicle implements FuelConsumable, PassengerCarrier
 
     Car(String id, String model, double maxSpeed,  int numWheels, double currentMileage, int currentPassengers, boolean maintenanceNeeded){
         super(id, model, maxSpeed, currentMileage, numWheels);
-        this.currentPassengers= currentPassengers;
+
+        try {
+            boardPassengers(currentPassengers);
+        }
+        catch(OverloadException e){
+            System.out.println("Passengers Exceeded Capacity");
+        }
+
         this.maintenanceNeeded= maintenanceNeeded;
     }
 
@@ -18,7 +25,11 @@ public class Car extends LandVehicle implements FuelConsumable, PassengerCarrier
             throw new InvalidOperationException("Distance is Negative!");
         }
 
+        double movableDistance= calculateFuelEfficiency()*fuelLevel;
 
+        if (distance>movableDistance) {
+            throw new InvalidOperationException("Can't move on this fuel level");
+        }
         currentMileage+= distance;
         System.out.println("Driving on road...");
     }

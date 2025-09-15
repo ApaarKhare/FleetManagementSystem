@@ -9,9 +9,21 @@ public class Bus extends LandVehicle implements FuelConsumable, PassengerCarrier
 
     Bus(String id, String model, double maxSpeed,int numWheels, double currentMileage,  int currentPassengers, double currentCargo, boolean maintenanceNeeded ){
         super(id, model, maxSpeed, currentMileage, numWheels);
-        this.currentPassengers= currentPassengers;
+        try {
+            boardPassengers(currentPassengers);
+        }
+        catch(OverloadException e){
+            System.out.println("Passengers Exceeded Capacity");
+        }
+
         this.maintenanceNeeded= maintenanceNeeded;
-        this.currentCargo= currentCargo;
+
+        try {
+            loadCargo(currentCargo);
+        }
+        catch(OverloadException e){
+            System.out.println("Cargo Exceeded Capacity");
+        }
     }
 
     @Override
@@ -20,6 +32,12 @@ public class Bus extends LandVehicle implements FuelConsumable, PassengerCarrier
     void move(double distance) throws InvalidOperationException{
         if (distance<0){
             throw new InvalidOperationException("Distance is Negative!");
+        }
+
+        double movableDistance= calculateFuelEfficiency()*fuelLevel;
+
+        if (distance>movableDistance) {
+            throw new InvalidOperationException("Can't move on this fuel level");
         }
         currentMileage+= distance;
         System.out.println("Transporting Passengers and Cargo...");

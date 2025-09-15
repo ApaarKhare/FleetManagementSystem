@@ -169,6 +169,18 @@ public class Main {
             manager.addVehicle(plane);
             manager.addVehicle(ship);
 
+            //adding fuel
+
+            for (Vehicle v : manager.getFleet()) {
+                if (v instanceof FuelConsumable f) {
+                    try {
+                        f.refuel(100);
+                    } catch (Exception e) {
+                        System.out.println("Refuel error: " + e.getMessage());
+                    }
+                }
+            }
+
             System.out.println("=== Demo: 100 km journey ===");
             manager.startAllJourneys(100);
             System.out.println(manager.generateReport());

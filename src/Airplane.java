@@ -9,9 +9,21 @@ public class Airplane extends AirVehicle implements FuelConsumable, PassengerCar
 
     Airplane(String id, String model, double maxSpeed, double currentMileage, double maxAltitude, int currentPassengers, double currentCargo, boolean maintenanceNeeded ){
         super(id, model, maxSpeed, currentMileage, maxAltitude);
-        this.currentPassengers= currentPassengers;
+        try {
+            boardPassengers(currentPassengers);
+        }
+        catch(OverloadException e){
+            System.out.println("Passengers Exceeded Capacity");
+        }
+
         this.maintenanceNeeded= maintenanceNeeded;
-        this.currentCargo= currentCargo;
+
+        try {
+            loadCargo(currentCargo);
+        }
+        catch(OverloadException e){
+            System.out.println("Cargo Exceeded Capacity");
+        }
     }
 
     @Override
@@ -20,6 +32,11 @@ public class Airplane extends AirVehicle implements FuelConsumable, PassengerCar
     void move(double distance) throws InvalidOperationException{
         if (distance<0){
             throw new InvalidOperationException("Distance is Negative!");
+        }
+        double movableDistance= calculateFuelEfficiency()*fuelLevel;
+
+        if (distance>movableDistance) {
+            throw new InvalidOperationException("Can't move on this fuel level");
         }
         currentMileage+= distance;
         System.out.println("Flying at"+ getMaxAltitude());
