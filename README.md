@@ -1,33 +1,48 @@
-Fleet Management System
+# Fleet Management System
 
 A Java console application that models a transportation fleet (cars, trucks, buses, airplanes, cargo ships).
-Implements a multi-level class hierarchy (abstract base Vehicle), interfaces for modular behavior, a FleetManager for orchestration, CSV persistence (save/load), and a menu-driven CLI.
+Implements:
 
-**Table of contents**
+* Multi-level class hierarchy (abstract base `Vehicle`)
+* Interfaces for modular behavior
+* `FleetManager` for orchestration
+* CSV persistence (save/load)
+* Menu-driven CLI
 
-  1. Quick start
-  2. Project layout
-  3. Build & run
-  4. CLI (runtime) behavior
-  5. CSV persistence format (exact)
-  6. Key classes / API summary
+---
 
+## 📑 Table of Contents
 
-**1 — Quick start (summary)**
+1. [Quick Start](#1--quick-start-summary)
+2. [Project Layout](#2--project-layout-source)
+3. [Build & Run](#3--build--run-detailed)
+4. [CLI Behavior](#4--cli-what-the-program-shows--menu)
+5. [CSV Persistence Format](#5--csv-persistence--exact-formats-used-by-this-implementation)
+6. [Key Classes / API Summary](#6--key-classes--api-developer-reference)
 
-Requirements: Java 17+ (code uses pattern matching for instanceof and other modern features).
+---
 
-Build (Unix/macOS):
+## 1 — Quick Start (summary)
 
+**Requirements:** Java **17+** (uses pattern matching for `instanceof` and other modern features).
+
+**Build (Unix/macOS):**
+
+```bash
 # from project root (where `src/` is located)
 mkdir -p out
 javac -d out $(find src -name "*.java")
 java -cp out main.Main
-Build & run in IntelliJ: Open project (it’s an IntelliJ-style project); locate main.Main and run.
+```
 
+**Build & run in IntelliJ:**
+Open project (IntelliJ-style layout) → locate `main.Main` → **Run**.
 
-**2 — Project layout (source)**
+---
 
+## 2 — Project Layout (source)
+
+```
 src/
  ├── main/
  │   └── Main.java                # CLI + demo
@@ -52,27 +67,38 @@ src/
      ├── InvalidOperationException.java
      ├── OverloadException.java
      └── InsufficientFuelException.java
+```
 
+---
 
-**3 — Build & run (detailed)**
+## 3 — Build & Run (detailed)
 
-CLI / terminal
-From the repo root:
+**CLI / terminal**
+
+```bash
 # compile
 mkdir -p out
 javac -d out $(find src -name "*.java")
+
 # run
 java -cp out main.Main
-IntelliJ IDEA
-File → Open → select project root
-Let IDEA import
-Run main.Main (right-click → Run)
+```
 
+**IntelliJ IDEA**
 
-**4 — CLI (what the program shows / menu)**
+1. `File → Open →` select project root
+2. Let IDEA import
+3. Run `main.Main` (right-click → Run)
 
-When launched, the program runs a demo setup and then enters a loop. The menu printed by Main.runCLI() is:
+---
 
+## 4 — CLI (what the program shows / menu)
+
+When launched, the program runs a demo setup and then enters a loop.
+
+**Menu (from `Main.runCLI()`):**
+
+```
 === Fleet Management System ===
 1. Add Vehicle
 2. Remove Vehicle
@@ -85,88 +111,131 @@ When launched, the program runs a demo setup and then enters a loop. The menu pr
 9. Search by Type
 10. List Vehicles Needing Maintenance
 11. Exit
+```
 
-1. Add Vehicle prompts for type (Car/Truck/Bus/Airplane/CargoShip) and the fields needed by the chosen constructor.
-2. Start Journey asks for a distance and calls FleetManager.startAllJourneys(distance).
-3. Refuel All prompts and calls refuel(...) on fuel-capable vehicles.
-4. Save Fleet and Load Fleet operate on a CSV file via FleetManager.saveToFile/loadFromFile.
+* **1. Add Vehicle** → prompts for type (`Car`/`Truck`/`Bus`/`Airplane`/`CargoShip`) and required constructor fields.
+* **2. Start Journey** → asks for distance → calls `FleetManager.startAllJourneys(distance)`.
+* **3. Refuel All** → prompts → calls `refuel(...)` on fuel-capable vehicles.
+* **4. Save/Load Fleet** → CSV file I/O via `FleetManager.saveToFile/loadFromFile`.
 
+---
 
-**5 — CSV persistence — exact formats used by this implementation**
+## 5 — CSV Persistence — exact formats used by this implementation
 
-  FleetManager.toCSV(Vehicle v) produces CSV lines in the following exact field orders (these are the columns saved & expected when loading):
+`FleetManager.toCSV(Vehicle v)` produces **exact field orders**.
+These are the columns saved & expected by `fromCSV`.
 
-  Car
-    Car,<id>,<model>,<maxSpeed>,<numWheels>,<currentMileage>,<currentPassengers>,<needsMaintenance>,<fuelLevel>
-    Example:
-    Car,C001,Toyota,120.00,4,1000.00,2,false,40.00
-  
-  Bus
-    Bus,<id>,<model>,<maxSpeed>,<numWheels>,<currentMileage>,<currentPassengers>,<currentCargo>,<needsMaintenance>,<fuelLevel>
-  
-  Truck
-    Truck,<id>,<model>,<maxSpeed>,<numWheels>,<currentMileage>,<currentCargo>,<needsMaintenance>,<fuelLevel>
-    
-  Airplane
-    Airplane,<id>,<model>,<maxSpeed>,<currentMileage>,<maxAltitude>,<currentPassengers>,<currentCargo>,<needsMaintenance>,<fuelLevel>
-    
-  CargoShip
-    CargoShip,<id>,<model>,<maxSpeed>,<currentMileage>,<sail(boolean)>,<currentCargo>,<needsMaintenance>,<fuelLevel>
+### Car
 
-  
-  FleetManager.loadFromFile() parses the CSV lines and calls the corresponding constructors (the fromCSV factory in FleetManager).
-  NOTE: The CSV field order used by toCSV and expected by fromCSV is implemented in managers/FleetManager.java. If you plan to change constructors or fields, update both toCSV and fromCSV.
+```
+Car,<id>,<model>,<maxSpeed>,<numWheels>,<currentMileage>,<currentPassengers>,<needsMaintenance>,<fuelLevel>
+Example:
+Car,C001,Toyota,120.00,4,1000.00,2,false,40.00
+```
 
-**6 — Key classes & API (developer reference)**
+### Bus
 
-managers.FleetManager
-Public methods (behavior summary):
+```
+Bus,<id>,<model>,<maxSpeed>,<numWheels>,<currentMileage>,<currentPassengers>,<currentCargo>,<needsMaintenance>,<fuelLevel>
+```
 
-  1. ArrayList<Vehicle> getFleet() — returns internal list.
-  2. void addVehicle(Vehicle v) — adds vehicle; throws InvalidOperationException if duplicate ID.
-  3. void removeVehicle(String id) — removes; throws InvalidOperationException if not found.
-  4. void startAllJourneys(double distance) — calls move(distance) on all vehicles; catches InvalidOperationException per vehicle and continues.
-  5. double getTotalFuelConsumption(double distance) — iterates FuelConsumable vehicles and calls consumeFuel(distance) (catches InsufficientFuelException for vehicles that cannot complete).
-  6. void maintainAll() — calls performMaintenance() on Maintainable vehicles that needsMaintenance().
-  7. void sortFleetByEfficiency() — sorts fleet using Vehicle.compareTo() which compares calculateFuelEfficiency().
-  8. List<String> searchByType(Class<?> type) — returns a String listing of vehicles matching instanceof type (the code returns List<String>).
-  9. String generateReport() — returns a formatted report (total vehicles, counts by type, average efficiency, total mileage, maintenance count).
-  10. List<String> getVehiclesNeedingMaintenance() — returns vehicles flagged / over mileage threshold.
-  11. void saveToFile(String filename) — writes CSV (calls toCSV)
-  12. void loadFromFile(String filename) — reads CSV, uses fromCSV factory (handles IO exceptions locally with messages).
-  13. See src/managers/FleetManager.java for implementation details.
+### Truck
 
-_vehicles.Vehicle (abstract)_
-  1. Fields: id, model, maxSpeed, currentMileage (note: in the code these are package-private).
-  2. Abstract:
-       void move(double distance) throws InvalidOperationException
-       double calculateFuelEfficiency() — km per liter (or 0 for non-fueled)
-       double estimateJourneyTime(double distance)
-  3. Concrete:
-       void displayInfo()
-       double getCurrentMileage()
-       String getId()
-  4. Implements Comparable<Vehicle>; compareTo compares calculateFuelEfficiency().
+```
+Truck,<id>,<model>,<maxSpeed>,<numWheels>,<currentMileage>,<currentCargo>,<needsMaintenance>,<fuelLevel>
+```
 
-Subclasses: LandVehicle, AirVehicle, WaterVehicle with adjustments on estimateJourneyTime(...).
+### Airplane
 
-_Interfaces (locations: src/interfaces/*)_
-  FuelConsumable
-    void refuel(double amount) throws InvalidOperationException
-    double getFuelLevel()
-    double consumeFuel(double distance) throws InsufficientFuelException
+```
+Airplane,<id>,<model>,<maxSpeed>,<currentMileage>,<maxAltitude>,<currentPassengers>,<currentCargo>,<needsMaintenance>,<fuelLevel>
+```
 
-  CargoCarrier
-    void unloadCargo(double weight) throws InvalidOperationException
-    double getCargoCapacity()
-    double getCurrentCargo()
+### CargoShip
 
-  PassengerCarrier
-    void boardPassengers(int count) throws OverloadException
-    void disembarkPassengers(int count) throws InvalidOperationException
-    int getPassengerCapacity(), int getCurrentPassengers()
+```
+CargoShip,<id>,<model>,<maxSpeed>,<currentMileage>,<sail(boolean)>,<currentCargo>,<needsMaintenance>,<fuelLevel>
+```
 
-  Maintainable
+⚠ **Note:** `FleetManager.loadFromFile()` expects exactly these field orders.
+If constructors/fields change → update **both** `toCSV` and `fromCSV`.
+
+---
+
+## 6 — Key Classes / API (developer reference)
+
+### `managers.FleetManager`
+
+**Public methods (summary):**
+
+1. `ArrayList<Vehicle> getFleet()` — returns internal list
+2. `void addVehicle(Vehicle v)` — throws `InvalidOperationException` if duplicate ID
+3. `void removeVehicle(String id)` — throws if not found
+4. `void startAllJourneys(double distance)` — calls `move(distance)` on all vehicles (logs errors, continues)
+5. `double getTotalFuelConsumption(double distance)` — aggregates across `FuelConsumable` vehicles (handles `InsufficientFuelException`)
+6. `void maintainAll()` — performs maintenance on flagged vehicles
+7. `void sortFleetByEfficiency()` — sorts by `Vehicle.compareTo()` (fuel efficiency)
+8. `List<String> searchByType(Class<?> type)` — list vehicles matching `instanceof`
+9. `String generateReport()` — totals, averages, counts by type, maintenance status
+10. `List<String> getVehiclesNeedingMaintenance()`
+11. `void saveToFile(String filename)` — CSV persistence
+12. `void loadFromFile(String filename)` — CSV load (handles IO locally)
+
+---
+
+### `vehicles.Vehicle` (abstract)
+
+**Fields:** `id`, `model`, `maxSpeed`, `currentMileage` (package-private).
+
+**Abstract methods:**
+
+* `void move(double distance) throws InvalidOperationException`
+* `double calculateFuelEfficiency()` — km/liter (0 for non-fueled)
+* `double estimateJourneyTime(double distance)`
+
+**Concrete methods:**
+
+* `void displayInfo()`
+* `double getCurrentMileage()`
+* `String getId()`
+
+Implements `Comparable<Vehicle>` — compares by `calculateFuelEfficiency()`.
+
+Subclasses: `LandVehicle`, `AirVehicle`, `WaterVehicle`, with overrides to `estimateJourneyTime(...)`.
+
+---
+
+### Interfaces (in `src/interfaces/`)
+
+* **FuelConsumable**
+
+  ```java
+  void refuel(double amount) throws InvalidOperationException
+  double getFuelLevel()
+  double consumeFuel(double distance) throws InsufficientFuelException
+  ```
+
+* **CargoCarrier**
+
+  ```java
+  void unloadCargo(double weight) throws InvalidOperationException
+  double getCargoCapacity()
+  double getCurrentCargo()
+  ```
+
+* **PassengerCarrier**
+
+  ```java
+  void boardPassengers(int count) throws OverloadException
+  void disembarkPassengers(int count) throws InvalidOperationException
+  int getPassengerCapacity()
+  int getCurrentPassengers()
+  ```
+
+* **Maintainable**
+
+  ```java
   void scheduleMaintenance()
-  boolean needsMaintenance() — code uses currentMileage > 10000 or a flag
+  boolean needsMaintenance()
   void performMaintenance()
+  ```
