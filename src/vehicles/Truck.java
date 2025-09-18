@@ -27,7 +27,7 @@ public class Truck extends LandVehicle implements FuelConsumable, CargoCarrier, 
         if (distance<0 ){
             throw new InvalidOperationException("Distance is Negative!");
         }
-        double movableDistance= (calculateFuelEfficiency()/fuelLevel);
+        double movableDistance= (calculateFuelEfficiency()*fuelLevel);
 
         if (distance>movableDistance) {
             throw new InvalidOperationException("Can't move on this fuel level");

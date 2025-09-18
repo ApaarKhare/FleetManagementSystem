@@ -1,9 +1,0 @@
-Car,C001,Toyota,120.00,4,1100.00,0,false, 300.00
-Truck,T001,Volvo,100.00,6,1100.00,0.00,false, 300.00
-Bus,B001,Mercedes,90.00,6,1100.00,0,0.00,false, 300.00
-Airplane,A001,Boeing,850.00,1100.00,10000.00,0,0.00,false, 300.00
-CargoShip,S001,Maersk,40.00,1100.00,false,0.00,false, 300.00
-Car,C002 ,Toyota,200.00,4,3800.00,3,false, 200.00
-Truck,T002,Tata,90.00,6,4800.00,300.00,false, 200.00
-Bus,B002,benz,120.00,6,4300.00,40,49.00,false, 200.00
-CargoShip,S002,Maersk,300.00,34800.00,false,200.00,true, 200.00
