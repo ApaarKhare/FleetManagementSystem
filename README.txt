@@ -25,14 +25,6 @@ Table of Contents
 --------------
 Requirements: Java 17+
 
-Build (Unix/macOS):
-    mkdir -p out
-    javac -d out $(find src -name "*.java")
-    java -cp out main.Main
-
-Build & Run in IntelliJ:
-    Open project → locate main.Main → Run
-
 ------------------------------------------------------------
 
 2. Project Layout
@@ -66,14 +58,20 @@ src/
 
 3. Build & Run
 --------------
-CLI / terminal:
-    mkdir -p out
-    javac -d out $(find src -name "*.java")
-    java -cp out main.Main
+How to Compile and Run (In Terminal)
 
-IntelliJ:
-    File → Open → project root
-    Run main.Main
+Compilation
+
+Navigate to the project directory(src)
+Compile all Java files:
+---------------------------------------------------------------------------------------------                                                                             
+| javac -d . exceptions/*.java interfaces/*.java vehicles/*.java managers/*.java main/*.java |
+---------------------------------------------------------------------------------------------
+
+To run: java main.Main
+
+In IntelliJ:
+Open Project, navigate to main. Run Main using play button.
 
 ------------------------------------------------------------
 
