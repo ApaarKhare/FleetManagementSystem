@@ -17,7 +17,8 @@ Table of Contents
 3. Build & Run
 4. CLI Behavior
 5. CSV Persistence Format
-6. Key Classes / API Summary
+6. Collection Design and Sorting
+7. Key Classes / API Summary
 
 ------------------------------------------------------------
 
@@ -90,7 +91,10 @@ When launched, the program runs a demo setup and then shows:
 8. Load Fleet
 9. Search by Type
 10. List Vehicles Needing Maintenance
-11. Exit
+11. Display Slowest Vehicle
+12. Display Fastest Vehicle
+13. Sort by Type
+14. Exit
 
 ------------------------------------------------------------
 
@@ -115,7 +119,17 @@ CargoShip,<id>,<model>,<maxSpeed>,<currentMileage>,<sail(boolean)>,<currentCargo
 
 ------------------------------------------------------------
 
-6. Key Classes / API Summary
+6. Collection Design and Sorting
+----------------------------
+
+Sorting & Reporting
+	sortBySpeed() and sortByModelName() methods added.
+	getFastestVehicle() / getSlowestVehicle() for analysis.
+	Uses Collections.sort(), Collections.max(), Collections.min() utilities.
+
+------------------------------------------------------------
+
+7. Key Classes / API Summary
 ----------------------------
 
 FleetManager:
