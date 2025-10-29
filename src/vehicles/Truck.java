@@ -69,7 +69,7 @@ public class Truck extends LandVehicle implements FuelConsumable, CargoCarrier, 
     }
 
     public double consumeFuel(double distance) throws InsufficientFuelException{
-        double newFuelLevel= fuelLevel- distance*calculateFuelEfficiency();
+        double newFuelLevel= fuelLevel- distance/calculateFuelEfficiency();
         if(newFuelLevel<0){
             throw new InsufficientFuelException();
         }

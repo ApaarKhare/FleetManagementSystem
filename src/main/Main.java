@@ -33,7 +33,10 @@ public class Main {
             System.out.println("8. Load Fleet");
             System.out.println("9. Search by Type");
             System.out.println("10. List Vehicles Needing Maintenance");
-            System.out.println("11. Exit");
+            System.out.println("11. Display Slowest Vehicle");
+            System.out.println("12. Display Fastest Vehicle");
+            System.out.println("13. Sort by Type");
+            System.out.println("14. Exit");
             System.out.print("Choose option: ");
 
             //-----
@@ -53,7 +56,10 @@ public class Main {
                     case 8 -> { System.out.print("Filename: "); manager.loadFromFile(sc.nextLine()); }
                     case 9 -> searchByTypeMenu();
                     case 10 -> System.out.println(manager.getVehiclesNeedingMaintenance());
-                    case 11 -> { System.out.println("Exiting..."); return; }
+                    case 11 -> System.out.println(manager.getSlowestVehicle());
+                    case 12 -> System.out.println(manager.getFastestVehicle());
+                    case 13 -> sortByCriterionMenu();
+                    case 14 -> { System.out.println("Exiting..."); return; }
                     default -> System.out.println("Invalid choice!");
                 }
             } catch (Exception e) {
@@ -188,6 +194,29 @@ public class Main {
         if (cls != null) {
             System.out.println(manager.searchByType(cls));
         } else System.out.println("Invalid type!");
+    }
+    private static void sortByCriterionMenu() {
+        System.out.print("Enter sorting criterion (speed/mileage/model): ");
+        String criterion = sc.nextLine().toLowerCase(); // lowercase to handle input flexibly
+
+        switch (criterion) {
+            case "speed" -> {
+                manager.sortBySpeed();
+                System.out.println("List sorted by speed:");
+            }
+            case "mileage" -> {
+                manager.sortByMileage();
+                System.out.println("List sorted by mileage:");
+            }
+            case "model" -> {
+                manager.sortByModelName();
+                System.out.println("List sorted lexicographically:");
+            }
+            default -> System.out.println("Invalid criterion!");
+        }
+
+        // Optionally, display the sorted list
+        manager.displayAll();
     }
 
     // ======================

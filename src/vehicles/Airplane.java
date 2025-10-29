@@ -41,7 +41,7 @@ public class Airplane extends AirVehicle implements FuelConsumable, PassengerCar
         }
 
         setCurrentMileage(distance);
-        System.out.println("Flying at"+ getMaxAltitude());
+        System.out.println("Flying at: "+ getMaxAltitude());
     };
 
     public double calculateFuelEfficiency(){

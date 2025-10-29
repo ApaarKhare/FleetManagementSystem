@@ -9,6 +9,9 @@ import exceptions.*;
 
 public class FleetManager {
     private ArrayList<Vehicle> fleet= new ArrayList<>();
+    private Set<String> modelNames = new HashSet<>();
+    private TreeSet<String> sortedModels = new TreeSet<>();
+
     //helpers:
     private boolean vehicleExists(ArrayList<Vehicle> list, String id) {
         for (Vehicle v : list) {
@@ -27,11 +30,13 @@ public class FleetManager {
 
     //main
     public void addVehicle(Vehicle v) throws InvalidOperationException{
-        if(vehicleExists(fleet, v.getId())){
+        if(vehicleExists(fleet, v.getId())) {
             throw new InvalidOperationException("Vehicle already exists");
         }
 
         fleet.add(v);
+        modelNames.add(v.getModel());
+        sortedModels.add(v.getModel());
         System.out.println("Vehicle added to fleet!");
     }
 
@@ -298,4 +303,67 @@ public class FleetManager {
         }
         return "";
     }
+
+    public void sortBySpeed() {
+        fleet.sort(Comparator.comparingDouble(Vehicle::getMaxSpeed));
+        System.out.println("Fleet sorted by speed!");
+    }
+
+    public void sortByModelName() {
+        fleet.sort(Comparator.comparing(Vehicle::getModel));
+        System.out.println("Fleet sorted by model name!");
+    }
+
+    public void sortByMileage() {
+        fleet.sort(Comparator.comparing(Vehicle::getCurrentMileage));
+        System.out.println("Fleet sorted by mileage!");
+    }
+
+    public String getFastestVehicle() {
+        return Collections.max(fleet, Comparator.comparingDouble(Vehicle::getMaxSpeed)).getId();
+    }
+
+    public String getSlowestVehicle() {
+        return Collections.min(fleet, Comparator.comparingDouble(Vehicle::getMaxSpeed)).getId();
+    }
+
+    private String display(Vehicle v) {
+        if (v instanceof Car c) {
+            return String.format("Car, ID: %s, Model: %s, Speed: %.2f, Wheels: %d, Mileage: %.2f, Passengers: %d, Maintenance Needed?: %b, Fuel Level: %.2f",
+                    c.getId(), c.getModel(), c.getMaxSpeed(),
+                    c.getNumWheels(), c.getCurrentMileage(),
+                    c.getCurrentPassengers(), c.needsMaintenance(), c.getFuelLevel());
+        } else if (v instanceof Bus b) {
+            return String.format("Bus, ID: %s, Model: %s, Speed: %.2f, Wheels: %d, Mileage: %.2f, Passengers: %d, Cargo: %.2f, Maintenance Needed?: %b, Fuel Level: %.2f",
+                    b.getId(), b.getModel(), b.getMaxSpeed(),
+                    b.getNumWheels(), b.getCurrentMileage(),
+                    b.getCurrentPassengers(), b.getCurrentCargo(),
+                    b.needsMaintenance(), b.getFuelLevel());
+        } else if (v instanceof CargoShip s) {
+            return String.format("CargoShip, ID: %s, Model: %s, Speed: %.2f, Mileage: %.2f, Sail?: %b, Cargo: %.2f, Maintenance Needed?: %b, Fuel Level: %.2f",
+                    s.getId(), s.getModel(), s.getMaxSpeed(),
+                    s.getCurrentMileage(), s.getSail(),
+                    s.getCurrentCargo(), s.needsMaintenance(), s.getfuelLevel());
+        } else if (v instanceof Airplane a) {
+            return String.format("Airplane, ID: %s, Model: %s, Speed: %.2f, Mileage: %.2f, Altitude: %.2f, Passengers: %d, Cargo: %.2f, Maintenance Needed?: %b, Fuel Level: %.2f",
+                    a.getId(), a.getModel(), a.getMaxSpeed(),
+                    a.getCurrentMileage(), a.getMaxAltitude(),
+                    a.getCurrentPassengers(), a.getCurrentCargo(),
+                    a.needsMaintenance(), a.getFuelLevel());
+        } else if (v instanceof Truck t) {
+            return String.format("Truck, ID: %s, Model: %s, Speed: %.2f, Wheels: %d, Mileage: %.2f, Cargo: %.2f, Maintenance Needed?: %b, Fuel Level: %.2f",
+                    t.getId(), t.getModel(), t.getMaxSpeed(),
+                    t.getNumWheels(), t.getCurrentMileage(),
+                    t.getCurrentCargo(), t.needsMaintenance(), t.getfuelLevel());
+        }
+        return "";
+    }
+
+    public void displayAll(){
+        for (Vehicle v : fleet) {
+            System.out.println(display(v));
+        }
+    }
+
+
 }
