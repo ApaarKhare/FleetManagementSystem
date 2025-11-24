@@ -199,7 +199,14 @@ public class FleetSimulatorGUI extends JFrame {
         }
 
         counterSum.setText(String.format("Sum: %.2f", sum));
-        counterDiff.setText(String.format("Difference: %.2f", SharedHighwayCounter.getUnsafe() - sum));
+
+        if (safeToggle.isSelected()){
+            counterDiff.setText(String.format("Difference: %.2f", sum- SharedHighwayCounter.getSafe()));
+        }
+        else{
+            counterDiff.setText(String.format("Difference: %.2f", sum- SharedHighwayCounter.getUnsafe()));
+        }
+
     }
 
     public static void launch(FleetManager manager) {
