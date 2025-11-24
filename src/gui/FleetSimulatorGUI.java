@@ -12,28 +12,32 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-
 public class FleetSimulatorGUI extends JFrame {
+
     private final FleetManager fleetManager;
     private final JPanel listPanel = new JPanel();
+
     private final JLabel counterUnsafe = new JLabel("Unsafe counter: 0");
     private final JLabel counterSafe = new JLabel("Safe counter: 0");
     private final JLabel counterSum = new JLabel("Sum of mileages: 0.00");
     private final JLabel counterDiff = new JLabel("Difference (unsafe - sum): 0.00");
+
     private final JButton startBtn = new JButton("Start");
     private final JButton pauseBtn = new JButton("Pause All");
     private final JButton resumeBtn = new JButton("Resume All");
     private final JButton stopBtn = new JButton("Stop All");
     private final JCheckBox safeToggle = new JCheckBox("Use Safe Counter (Lock)");
-    // controllers keyed by vehicle id (preserves insertion order)
+
+    // Controller threads for vehicles
     private final Map<String, VehicleController> controllers = new LinkedHashMap<>();
-    // mapping vehicle id -> JLabel that displays that vehicle row (for safe updates)
     private final Map<String, JLabel> vehicleLabels = new HashMap<>();
+
     private Timer uiTimer;
 
     public FleetSimulatorGUI(FleetManager manager) {
         super("Fleet Highway Simulator");
         this.fleetManager = manager;
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 600);
         buildUI();
@@ -41,7 +45,10 @@ public class FleetSimulatorGUI extends JFrame {
     }
 
     private void buildUI() {
+
         setLayout(new BorderLayout());
+
+        // --- TOP PANEL (Buttons) ---
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
         top.add(startBtn);
         top.add(safeToggle);
@@ -50,37 +57,39 @@ public class FleetSimulatorGUI extends JFrame {
         top.add(stopBtn);
         add(top, BorderLayout.NORTH);
 
+        // --- CENTER PANEL: List of Vehicles ---
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         JScrollPane sp = new JScrollPane(listPanel);
         add(sp, BorderLayout.CENTER);
 
-        JPanel bottom = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 8));
+        // --- BOTTOM PANEL (Counters) ---
+        JPanel bottom = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 8));
         bottom.add(counterUnsafe);
         bottom.add(counterSafe);
         bottom.add(counterSum);
         bottom.add(counterDiff);
         add(bottom, BorderLayout.SOUTH);
 
-        // Actions
+        // --- Actions ---
         startBtn.addActionListener(e -> startSimulation());
         pauseBtn.addActionListener(e -> controllers.values().forEach(VehicleController::pause));
         resumeBtn.addActionListener(e -> controllers.values().forEach(VehicleController::resume));
         stopBtn.addActionListener(e -> stopSimulation());
-        safeToggle.addActionListener(e -> setSafeModeForControllers(safeToggle.isSelected()));
+        safeToggle.addActionListener(e ->
+                controllers.values().forEach(c -> c.setUseSafeCounter(safeToggle.isSelected()))
+        );
 
-        // populate vehicle rows
+        // --- Build vehicle rows ---
         List<Vehicle> fleet = loadVehicles();
         if (fleet.isEmpty()) {
-            JLabel info = new JLabel("No vehicles available in FleetManager. Add vehicles or call demo setup before launching GUI.");
-            info.setBorder(BorderFactory.createEmptyBorder(8,8,8,8));
+            JLabel info = new JLabel("No vehicles found in FleetManager.");
+            info.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
             listPanel.add(info);
         } else {
-            for (Vehicle v : fleet) {
-                addVehicleRow(v);
-            }
+            for (Vehicle v : fleet) addVehicleRow(v);
         }
 
-        // UI refresh timer runs on EDT and updates labels safely
+        // --- Start UI updater ---
         uiTimer = new Timer(500, ev -> refreshUI());
         uiTimer.start();
     }
@@ -89,78 +98,83 @@ public class FleetSimulatorGUI extends JFrame {
         try {
             List<Vehicle> list = fleetManager.getAllVehicles();
             return list != null ? list : Collections.emptyList();
-        } catch (Throwable t) {
+        } catch (Exception e) {
             return Collections.emptyList();
         }
     }
 
     private void addVehicleRow(Vehicle v) {
         JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        row.setBorder(BorderFactory.createEmptyBorder(4,8,4,8));
+        row.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.GRAY, 1),
+                BorderFactory.createEmptyBorder(6, 8, 6, 8)
+        ));
+
         JLabel info = new JLabel(formatVehicle(v));
-        info.setPreferredSize(new Dimension(600, 20));
+        info.setPreferredSize(new Dimension(620, 22));
+
         JButton refuel = new JButton("Refuel +100");
         refuel.addActionListener(a -> {
             try {
+                if (!(v instanceof FuelConsumable)) {
+                    JOptionPane.showMessageDialog(this, "Vehicle " + v.getId() + " is not fuel-consumable.");
+                    return;
+                }
                 ((FuelConsumable) v).refuel(100.0);
+
                 VehicleController ctrl = controllers.get(v.getId());
                 if (ctrl != null) ctrl.resume();
+
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Refuel failed: " + ex.getMessage());
+                JOptionPane.showMessageDialog(this,
+                        "Refuel failed: " + ex.getMessage(),
+                        "Refuel Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
+
         row.add(info);
         row.add(refuel);
+
         listPanel.add(row);
         vehicleLabels.put(v.getId(), info);
     }
 
     private String formatVehicle(Vehicle v) {
-        String fuelStr = "?";
+        String fuel = "?";
         try {
-            fuelStr = String.format("%.2f", ((FuelConsumable) v).getFuelLevel());
-        } catch (Throwable ignored) {}
-        return String.format("%s | Model: %s | Mileage: %.2f | Fuel: %s",
-                v.getId(), v.getModel(), v.getCurrentMileage(), fuelStr);
+            fuel = String.format("%.2f", ((FuelConsumable) v).getFuelLevel());
+        } catch (Exception ignored) {}
+
+        return String.format("%s  |  %s  |  Mileage: %.2f km  |  Fuel: %s",
+                v.getId(), v.getModel(), v.getCurrentMileage(), fuel);
     }
 
     private void startSimulation() {
-        // reset counters for clean demo
+
         SharedHighwayCounter.resetAll();
-        boolean useSafe = safeToggle.isSelected();
+        boolean safe = safeToggle.isSelected();
 
-        // stop existing controllers if already running
-        if (!controllers.isEmpty()) {
-            controllers.values().forEach(VehicleController::stop);
-            controllers.clear();
-        }
+        // stop old controllers
+        controllers.values().forEach(VehicleController::stop);
+        controllers.clear();
 
-        // ensure UI labels correspond to current fleet (reload if needed)
+        // rebuild rows (if vehicles changed)
         List<Vehicle> fleet = loadVehicles();
-        // If the fleet has changed (IDs different), rebuild the listPanel
-        if (!vehicleLabels.keySet().equals(new LinkedHashSet<>(mapIds(fleet)))) {
-            // rebuild UI rows
-            vehicleLabels.clear();
-            listPanel.removeAll();
-            for (Vehicle v : fleet) addVehicleRow(v);
-            listPanel.revalidate();
-            listPanel.repaint();
-        }
+        listPanel.removeAll();
+        vehicleLabels.clear();
+        for (Vehicle v : fleet) addVehicleRow(v);
+        listPanel.revalidate();
+        listPanel.repaint();
 
-        // create controllers and start threads
+        // start new controllers
         for (Vehicle v : fleet) {
-            VehicleController ctrl = new VehicleController(v, useSafe);
-            controllers.put(v.getId(), ctrl);
+            VehicleController ctrl = new VehicleController(v, safe);
             ctrl.start();
+            controllers.put(v.getId(), ctrl);
         }
 
         startBtn.setEnabled(false);
-    }
-
-    private List<String> mapIds(List<Vehicle> fleet) {
-        List<String> ids = new ArrayList<>();
-        for (Vehicle v : fleet) ids.add(v.getId());
-        return ids;
     }
 
     private void stopSimulation() {
@@ -169,32 +183,26 @@ public class FleetSimulatorGUI extends JFrame {
         startBtn.setEnabled(true);
     }
 
-    private void setSafeModeForControllers(boolean useSafe) {
-        controllers.values().forEach(c -> c.setUseSafeCounter(useSafe));
-    }
-
     private void refreshUI() {
-        // Update counters
+
         counterUnsafe.setText("Unsafe counter: " + SharedHighwayCounter.getUnsafe());
         counterSafe.setText("Safe counter: " + SharedHighwayCounter.getSafe());
 
-        // Sum mileage across vehicles, update vehicle labels
         double sum = 0.0;
-        for (Vehicle v : loadVehicles()) {
+        List<Vehicle> fleet = loadVehicles();
+
+        for (Vehicle v : fleet) {
             sum += v.getCurrentMileage();
+
             JLabel lbl = vehicleLabels.get(v.getId());
             if (lbl != null) lbl.setText(formatVehicle(v));
         }
-        counterSum.setText(String.format("Sum of mileages: %.2f", sum));
-        double diff = SharedHighwayCounter.getUnsafe() - sum;
-        counterDiff.setText(String.format("Difference (unsafe - sum): %.2f", diff));
+
+        counterSum.setText(String.format("Sum: %.2f", sum));
+        counterDiff.setText(String.format("Difference: %.2f", SharedHighwayCounter.getUnsafe() - sum));
     }
 
-    // Launch helper
     public static void launch(FleetManager manager) {
-        SwingUtilities.invokeLater(() -> {
-            FleetSimulatorGUI gui = new FleetSimulatorGUI(manager);
-            gui.setVisible(true);
-        });
+        SwingUtilities.invokeLater(() -> new FleetSimulatorGUI(manager).setVisible(true));
     }
 }
