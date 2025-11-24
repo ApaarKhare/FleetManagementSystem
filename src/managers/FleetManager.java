@@ -6,7 +6,6 @@ import vehicles.*;
 import interfaces.*;
 import exceptions.*;
 
-
 public class FleetManager {
     private ArrayList<Vehicle> fleet= new ArrayList<>();
     private Set<String> modelNames = new HashSet<>();
@@ -366,4 +365,7 @@ public class FleetManager {
     }
 
 
+    public List<Vehicle> getAllVehicles() {
+        return Collections.unmodifiableList(fleet);
+    }
 }

@@ -1,5 +1,7 @@
 package main;
 
+import gui.*;
+import simulation.*;
 import vehicles.*;
 import exceptions.*;
 import interfaces.*;
@@ -13,7 +15,8 @@ public class Main {
 
     public static void main(String[] args) {
         demoSetup();
-        runCLI();
+        FleetSimulatorGUI.launch(manager);
+//        runCLI();
     }
 
     //CLI
@@ -227,14 +230,14 @@ public class Main {
             Vehicle car = new Car("C001", "Toyota", 120.0, 4, 0.0, 0, false);
             Vehicle truck = new Truck("T001", "Volvo", 100.0, 6, 0.0, 0, false);
             Vehicle bus = new Bus("B001", "Mercedes", 90.0, 6, 0.0, 0, 0, false);
-            Vehicle plane = new Airplane("A001", "Boeing", 850.0, 0.0, 10000, 0, 0, false);
-            Vehicle ship = new CargoShip("S001", "Maersk", 40.0, 0.0, false, 0, false);
+//            Vehicle plane = new Airplane("A001", "Boeing", 850.0, 0.0, 10000, 0, 0, false);
+//            Vehicle ship = new CargoShip("S001", "Maersk", 40.0, 0.0, false, 0, false);
 
             manager.addVehicle(car);
             manager.addVehicle(truck);
             manager.addVehicle(bus);
-            manager.addVehicle(plane);
-            manager.addVehicle(ship);
+//            manager.addVehicle(plane);
+//            manager.addVehicle(ship);
 
             //adding fuel
 
@@ -248,8 +251,8 @@ public class Main {
                 }
             }
 
-            System.out.println("=== Demo: 100 km journey ===");
-            manager.startAllJourneys(100);
+//            System.out.println("=== Demo: 100 km journey ===");
+//            manager.startAllJourneys(100);
             System.out.println(manager.generateReport());
             manager.saveToFile("fleet.csv");
         } catch (Exception e) {
